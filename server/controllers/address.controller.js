@@ -5,7 +5,10 @@ const USER = require('../models/user.model');
 const getAllAddresses = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const addresses = await ADDRESS.find({ userId }).sort({ isDefault: -1, createdAt: -1 });
+    const addresses = await ADDRESS.find({ userId }).sort({
+      isDefault: -1,
+      createdAt: -1,
+    });
 
     return res.status(200).json({
       msg: 'Addresses retrieved successfully!',
@@ -20,7 +23,18 @@ const getAllAddresses = async (req, res, next) => {
 const createAddress = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { type, fullName, phoneNumber, addressLine1, addressLine2, city, state, zipCode, country, isDefault } = req.body;
+    const {
+      type,
+      fullName,
+      phoneNumber,
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      zipCode,
+      country,
+      isDefault,
+    } = req.body;
 
     // If this is set as default, unset all other defaults for this user
     if (isDefault) {
@@ -44,6 +58,7 @@ const createAddress = async (req, res, next) => {
     // Add address to user's addresses array
     await USER.findByIdAndUpdate(userId, {
       $push: { addresses: newAddress._id },
+      returnDocument: 'after',
     });
 
     return res.status(201).json({
@@ -60,7 +75,18 @@ const updateAddress = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = req.user._id;
-    const { type, fullName, phoneNumber, addressLine1, addressLine2, city, state, zipCode, country, isDefault } = req.body;
+    const {
+      type,
+      fullName,
+      phoneNumber,
+      addressLine1,
+      addressLine2,
+      city,
+      state,
+      zipCode,
+      country,
+      isDefault,
+    } = req.body;
 
     // Verify address belongs to user
     const address = await ADDRESS.findOne({ _id: id, userId });
@@ -72,7 +98,10 @@ const updateAddress = async (req, res, next) => {
 
     // If this is set as default, unset all other defaults for this user
     if (isDefault) {
-      await ADDRESS.updateMany({ userId, _id: { $ne: id } }, { isDefault: false });
+      await ADDRESS.updateMany(
+        { userId, _id: { $ne: id } },
+        { isDefault: false },
+      );
     }
 
     const updatedAddress = await ADDRESS.findByIdAndUpdate(
@@ -89,7 +118,7 @@ const updateAddress = async (req, res, next) => {
         country,
         isDefault,
       },
-      { new: true, runValidators: true },
+      { runValidators: true, returnDocument: 'after' },
     );
 
     return res.status(200).json({
@@ -145,10 +174,17 @@ const setDefaultAddress = async (req, res, next) => {
     }
 
     // Unset all other defaults for this user
-    await ADDRESS.updateMany({ userId, _id: { $ne: id } }, { isDefault: false });
+    await ADDRESS.updateMany(
+      { userId, _id: { $ne: id } },
+      { isDefault: false },
+    );
 
     // Set this address as default
-    const updatedAddress = await ADDRESS.findByIdAndUpdate(id, { isDefault: true }, { new: true });
+    const updatedAddress = await ADDRESS.findByIdAndUpdate(
+      id,
+      { isDefault: true },
+      { new: true },
+    );
 
     return res.status(200).json({
       msg: 'Default address set successfully!',

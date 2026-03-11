@@ -5,6 +5,7 @@ import { getProfile } from '@/Store/features/auth/auth.slice';
 import ProfileHeader from './components/ProfileHeader';
 import ProfileForm from './components/ProfileForm';
 import CommonHero from '@/pages/components/CommonHero';
+import { Button } from '@/components/ui/button';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,15 @@ const Profile = () => {
 
           <div className="mt-12">
             <ProfileForm user={user} />
+          </div>
+          <div className="mt-10 flex justify-end items-center">
+            <Button
+              variant="primary"
+              className="cursor-pointer"
+              onClick={() => navigate('/addresses')}
+            >
+              View Addresses
+            </Button>
           </div>
         </div>
       </section>

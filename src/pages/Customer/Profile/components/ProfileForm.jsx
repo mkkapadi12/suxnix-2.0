@@ -3,11 +3,25 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
-import { Form } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import InputField from '@/components/form/InputField';
 import { updateProfile } from '@/Store/features/profile/profile.slice';
 import { profileSchema } from '../schemas/profileSchema';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const ProfileForm = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -101,7 +115,7 @@ const ProfileForm = ({ user }) => {
           <div>
             <label className="text-sm font-medium text-gray-600">Phone</label>
             <p className="text-lg mt-2" style={{ color: '#222222' }}>
-              {user?.phone || 'Not provided'}
+              {user?.phone || 0o0}
             </p>
           </div>
 
@@ -155,11 +169,11 @@ const ProfileForm = ({ user }) => {
               form={form}
               name="phone"
               label="Phone"
-              type="tel"
+              type="number"
               placeholder="Enter phone number"
             />
 
-            <div>
+            {/* <div>
               <label className="text-sm font-medium mb-2 block">Gender</label>
               <select
                 {...form.register('gender')}
@@ -175,7 +189,36 @@ const ProfileForm = ({ user }) => {
                   {form.formState.errors.gender.message}
                 </p>
               )}
-            </div>
+            </div> */}
+
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gender</FormLabel>
+
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Gender" />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <InputField
               form={form}

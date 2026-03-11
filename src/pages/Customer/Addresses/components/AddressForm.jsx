@@ -13,7 +13,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { createAddress, updateAddress } from '@/Store/features/address/address.slice';
+import {
+  createAddress,
+  updateAddress,
+} from '@/Store/features/address/address.slice';
 import { addressSchema } from '../schemas/addressSchema';
 
 const AddressForm = ({ open, onOpenChange, address = null }) => {
@@ -73,10 +76,9 @@ const AddressForm = ({ open, onOpenChange, address = null }) => {
       onOpenChange(false);
       form.reset();
     } catch (error) {
-      toast.error(
-        typeof error === 'string' ? error : 'Operation failed',
-        { id: toastId },
-      );
+      toast.error(typeof error === 'string' ? error : 'Operation failed', {
+        id: toastId,
+      });
     }
   };
 
