@@ -1,8 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import HeroSection from './components/HeroSection';
-import { useDispatch, useSelector } from 'react-redux';
-import { Card } from '@/components/ui/card';
-import { getProfile } from '@/Store/features/auth/auth.slice';
+import { useSelector } from 'react-redux';
+import BrandCarousel from './components/BrandCarousel';
+import Features from './components/Features';
+import ProductHightlight from './components/ProductHightlight';
+import Video from './components/Video';
+import StateSection from './components/StateSection';
+import Ingredients from './components/Ingredients';
+import Formula from './components/Formula';
+import Packages from './components/Packages';
+import Testimonials from './components/Testimonials';
+import LatestNews from './components/LatestNews';
 
 const Home = () => {
   const { user, loading } = useSelector((state) => state.user);
@@ -18,6 +26,16 @@ const Home = () => {
   return (
     <main>
       <HeroSection />
+      <BrandCarousel />
+      <Features />
+      <ProductHightlight />
+      <Video />
+      <StateSection />
+      <Ingredients />
+      <Formula />
+      <Packages />
+      <Testimonials />
+      <LatestNews />
     </main>
   );
 };
