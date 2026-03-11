@@ -57,4 +57,33 @@ const profile = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUser, loginUser, profile };
+const updateProfile = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const { firstName, lastName, phone, gender, dateOfBirth, bio, profilePicture } = req.body;
+
+    const updateData = {};
+
+    if (firstName !== undefined) updateData.firstName = firstName;
+    if (lastName !== undefined) updateData.lastName = lastName;
+    if (phone !== undefined) updateData.phone = phone;
+    if (gender !== undefined) updateData.gender = gender;
+    if (dateOfBirth !== undefined) updateData.dateOfBirth = dateOfBirth;
+    if (bio !== undefined) updateData.bio = bio;
+    if (profilePicture !== undefined) updateData.profilePicture = profilePicture;
+
+    const updatedUser = await USER.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    }).select('-password -confirmPassword');
+
+    return res.status(200).json({
+      msg: 'Profile updated successfully!',
+      user: updatedUser,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = { registerUser, loginUser, profile, updateProfile };

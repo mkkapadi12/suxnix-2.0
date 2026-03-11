@@ -7,6 +7,8 @@ import Layout from './components/layout/Layout';
 import Register from './pages/Customer/Auth/Register';
 import Login from './pages/Customer/Auth/Login';
 import Contact from './pages/Contact';
+import Profile from './pages/Customer/Profile/Profile';
+import Addresses from './pages/Customer/Addresses/Addresses';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
+      },
+      {
+        path: 'addresses',
+        element: <Addresses />,
       },
     ],
   },

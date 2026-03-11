@@ -39,6 +39,37 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+
+    phone: {
+      type: String,
+      default: '',
+      trim: true,
+    },
+
+    gender: {
+      type: String,
+      enum: ['Male', 'Female', 'Other', ''],
+      default: '',
+    },
+
+    dateOfBirth: {
+      type: Date,
+      default: null,
+    },
+
+    bio: {
+      type: String,
+      default: '',
+      trim: true,
+      maxlength: [500, 'Bio cannot exceed 500 characters'],
+    },
+
+    addresses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address',
+      },
+    ],
   },
   { timestamps: true },
 );
