@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { updateProfileAPI } from './profileAPI';
+import { getProfile } from '../auth/auth.slice';
 
 const initialState = {
   loading: false,
@@ -10,9 +11,10 @@ const initialState = {
 // UPDATE PROFILE
 export const updateProfile = createAsyncThunk(
   'profile/updateProfile',
-  async (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     try {
       const result = await updateProfileAPI(data);
+      dispatch(getProfile());
       return result;
     } catch (error) {
       return rejectWithValue(

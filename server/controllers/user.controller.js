@@ -60,7 +60,15 @@ const profile = async (req, res, next) => {
 const updateProfile = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { firstName, lastName, phone, gender, dateOfBirth, bio, profilePicture } = req.body;
+    const {
+      firstName,
+      lastName,
+      phone,
+      gender,
+      dateOfBirth,
+      bio,
+      profilePicture,
+    } = req.body;
 
     const updateData = {};
 
@@ -70,11 +78,12 @@ const updateProfile = async (req, res, next) => {
     if (gender !== undefined) updateData.gender = gender;
     if (dateOfBirth !== undefined) updateData.dateOfBirth = dateOfBirth;
     if (bio !== undefined) updateData.bio = bio;
-    if (profilePicture !== undefined) updateData.profilePicture = profilePicture;
+    if (profilePicture !== undefined)
+      updateData.profilePicture = profilePicture;
 
     const updatedUser = await USER.findByIdAndUpdate(userId, updateData, {
-      new: true,
       runValidators: true,
+      returnDocument: 'after',
     }).select('-password -confirmPassword');
 
     return res.status(200).json({
