@@ -12,7 +12,7 @@ import {
 import { Button } from '../ui/button';
 import { Link } from 'react-router-dom';
 import { PAGE_ICONS } from '@/lib/icons/page.icons';
-import DesktopNav from './Desktopnav';
+import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/Store/features/auth/auth.slice';
