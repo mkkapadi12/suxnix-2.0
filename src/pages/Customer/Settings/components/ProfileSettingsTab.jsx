@@ -24,8 +24,8 @@ const ProfileSettingsTab = () => {
       <ProfileHeader user={user} />
 
       {/* Profile Form */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold text-suxnix-heading mb-6">Edit Profile Information</h3>
+      <Card className="p-4 sm:p-6 gap-4 sm:gap-6">
+        <h3 className="text-lg font-semibold text-suxnix-heading mb-2 sm:mb-6">Edit Profile Information</h3>
         <ProfileForm user={user} />
       </Card>
 

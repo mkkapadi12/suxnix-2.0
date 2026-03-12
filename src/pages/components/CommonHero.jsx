@@ -6,7 +6,7 @@ const CommonHero = ({ title }) => {
   return (
     <Wrapper className="pt-23 md:pt-23 lg:pt-28 relative">
       <div
-        className="p-[150px_0px_120px] lg:p-[230px_0px_150px] breadcrumb-bg relative bg-position-[center_center] bg-cover bg-no-repeat z-1"
+        className="p-[150px_0px_120px] lg:p-[150px_0px_150px] breadcrumb-bg relative bg-position-[center_center] bg-cover bg-no-repeat z-1"
         style={{
           backgroundImage: `url("https://suxnix-dev.myshopify.com/cdn/shop/files/video_bg_fc243aec-f2b9-451a-87dd-84dc29514d83.jpg?v=1736693977")`,
         }}

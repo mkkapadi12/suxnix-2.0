@@ -4,6 +4,7 @@ import {
   CheckCircle,
   ChevronDownIcon,
   Clock,
+  Edit,
   Eye,
   Facebook,
   Globe,
@@ -25,6 +26,8 @@ import {
   Sparkles,
   Star,
   Twitter,
+  UserPen,
+  X,
   XCircle,
   Youtube,
 } from 'lucide-react';
@@ -47,6 +50,8 @@ export const PAGE_ICONS = {
   PLAY: Play,
   CLOCK: Clock,
   VIEWS: Eye,
+  EDIT: UserPen,
+  CANCLE: X,
 
   //Navbar icons
   CART: ShoppingCart,

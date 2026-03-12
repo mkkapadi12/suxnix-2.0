@@ -59,8 +59,10 @@ const Settings = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Sidebar Navigation */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-sm p-4 sticky top-20">
-                <h2 className="text-lg font-bold text-suxnix-heading mb-4">Settings</h2>
+              <div className="bg-white rounded-lg border p-4 sticky top-20">
+                <h2 className="text-lg font-bold text-suxnix-heading mb-4">
+                  Settings
+                </h2>
                 <nav className="space-y-2">
                   {tabs.map((tab) => (
                     <button
@@ -82,7 +84,7 @@ const Settings = () => {
 
             {/* Main Content */}
             <div className="lg:col-span-3">
-              <div className="bg-white rounded-lg shadow-sm p-6 md:p-8">
+              <div className="sm:bg-white rounded-lg sm:p-6 md:p-8">
                 {/* Tab Title */}
                 <div className="mb-8">
                   <h1 className="text-2xl font-bold text-suxnix-heading">

@@ -41,16 +41,23 @@ const Account = () => {
         <div className="max-w-330 mx-auto px-4 container">
           <ProfileHeader user={user} />
 
-          <div className="mt-12">
+          <div className="mt-6 sm:mt-8 md:mt-12">
             <ProfileForm user={user} />
           </div>
-          <div className="mt-10 flex justify-end items-center">
+          <div className="mt-10 flex gap-3 justify-end items-center">
             <Button
               variant="primary"
               className="cursor-pointer"
               onClick={() => navigate('/addresses')}
             >
               View Addresses
+            </Button>
+            <Button
+              variant="primary"
+              className="cursor-pointer"
+              onClick={() => navigate('/account/settings')}
+            >
+              Settings
             </Button>
           </div>
         </div>

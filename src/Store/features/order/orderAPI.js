@@ -1,8 +1,10 @@
-import { privateAPI } from '../../services/privateAPI';
+import privateAPI from '../../services/privateAPI';
 
 export const getOrders = async (params = {}) => {
   const queryString = new URLSearchParams(params).toString();
-  const response = await privateAPI.get(`/user/orders${queryString ? '?' + queryString : ''}`);
+  const response = await privateAPI.get(
+    `/user/orders${queryString ? '?' + queryString : ''}`,
+  );
   return response.data;
 };
 
@@ -22,6 +24,9 @@ export const updateOrderStatusAPI = async (orderId, statusData) => {
 };
 
 export const cancelOrderAPI = async (orderId, data) => {
-  const response = await privateAPI.patch(`/user/orders/${orderId}/cancel`, data);
+  const response = await privateAPI.patch(
+    `/user/orders/${orderId}/cancel`,
+    data,
+  );
   return response.data;
 };

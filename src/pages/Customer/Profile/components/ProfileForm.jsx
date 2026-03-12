@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { PAGE_ICONS } from '@/lib/icons/page.icons';
 
 const ProfileForm = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -60,11 +61,15 @@ const ProfileForm = ({ user }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 md:p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold" style={{ color: '#222222' }}>
+    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-8">
+      <div className="flex flex-row justify-between gap-2 items-center mb-6">
+        <h2
+          className="text-xl sm:text-2xl font-bold"
+          style={{ color: '#222222' }}
+        >
           Personal Information
         </h2>
+
         <Button
           type="button"
           variant={isEditing ? 'outline' : 'default'}
@@ -77,21 +82,21 @@ const ProfileForm = ({ user }) => {
           className={
             isEditing
               ? 'border-gray-300 text-gray-700'
-              : 'bg-suxnix-primary hover:bg-amber-500'
+              : 'bg-suxnix-primary hover:bg-amber-500 text-sm'
           }
         >
-          {isEditing ? 'Cancel' : 'Edit Profile'}
+          {isEditing ? <PAGE_ICONS.CANCLE /> : <PAGE_ICONS.EDIT />}
         </Button>
       </div>
 
       {!isEditing ? (
         // Display Mode
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <label className="text-sm font-medium text-gray-600">
               First Name
             </label>
-            <p className="text-lg mt-2" style={{ color: '#222222' }}>
+            <p className="text-base mt-2" style={{ color: '#222222' }}>
               {user?.firstName}
             </p>
           </div>
@@ -100,28 +105,28 @@ const ProfileForm = ({ user }) => {
             <label className="text-sm font-medium text-gray-600">
               Last Name
             </label>
-            <p className="text-lg mt-2" style={{ color: '#222222' }}>
+            <p className="text-base mt-2" style={{ color: '#222222' }}>
               {user?.lastName}
             </p>
           </div>
 
-          <div>
+          <div className="col-span-2">
             <label className="text-sm font-medium text-gray-600">Email</label>
-            <p className="text-lg mt-2" style={{ color: '#222222' }}>
+            <p className="text-base mt-2" style={{ color: '#222222' }}>
               {user?.email}
             </p>
           </div>
 
           <div>
             <label className="text-sm font-medium text-gray-600">Phone</label>
-            <p className="text-lg mt-2" style={{ color: '#222222' }}>
+            <p className="text-base mt-2" style={{ color: '#222222' }}>
               {user?.phone || 0o0}
             </p>
           </div>
 
           <div>
             <label className="text-sm font-medium text-gray-600">Gender</label>
-            <p className="text-lg mt-2" style={{ color: '#222222' }}>
+            <p className="text-base mt-2" style={{ color: '#222222' }}>
               {user?.gender || 'Not provided'}
             </p>
           </div>
@@ -130,16 +135,16 @@ const ProfileForm = ({ user }) => {
             <label className="text-sm font-medium text-gray-600">
               Date of Birth
             </label>
-            <p className="text-lg mt-2" style={{ color: '#222222' }}>
+            <p className="text-base mt-2" style={{ color: '#222222' }}>
               {user?.dateOfBirth
                 ? new Date(user.dateOfBirth).toLocaleDateString()
                 : 'Not provided'}
             </p>
           </div>
 
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <label className="text-sm font-medium text-gray-600">Bio</label>
-            <p className="text-lg mt-2" style={{ color: '#222222' }}>
+            <p className="text-base mt-2" style={{ color: '#222222' }}>
               {user?.bio || 'Not provided'}
             </p>
           </div>
