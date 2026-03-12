@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// const API = 'http://localhost:3000/api';
+const API = 'https://suxnix-server.vercel.app/api';
+
 const publicAPI = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: API,
 });
 
 export default publicAPI;

@@ -7,7 +7,7 @@ import Layout from './components/layout/Layout';
 import Register from './pages/Customer/Auth/Register';
 import Login from './pages/Customer/Auth/Login';
 import Contact from './pages/Contact';
-import Profile from './pages/Customer/Profile/Profile';
+import Account from './pages/Customer/Profile/Account';
 import Addresses from './pages/Customer/Addresses/Addresses';
 import Settings from './pages/Customer/Settings/Settings';
 
@@ -38,8 +38,12 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: 'profile',
-        element: <Profile />,
+        path: 'account',
+        element: <Account />,
+      },
+      {
+        path: 'account/settings',
+        element: <Settings />,
       },
       {
         path: 'addresses',
