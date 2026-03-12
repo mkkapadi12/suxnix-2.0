@@ -40,14 +40,14 @@ const UserMenu = () => {
 
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem asChild>
-          <Link to="/profile" className="flex gap-2 cursor-pointer">
+          <Link to="/account" className="flex gap-2 cursor-pointer">
             <User size={16} />
-            Profile
+            Account
           </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
-          <Link to="/settings" className="flex gap-2 cursor-pointer">
+          <Link to="/account/settings" className="flex gap-2 cursor-pointer">
             <Settings size={16} />
             Settings
           </Link>

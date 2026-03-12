@@ -14,8 +14,7 @@ import { Link } from 'react-router-dom';
 import { PAGE_ICONS } from '@/lib/icons/page.icons';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
-import { useDispatch, useSelector } from 'react-redux';
-import { getProfile } from '@/Store/features/auth/auth.slice';
+import { useSelector } from 'react-redux';
 import UserMenu from './UserMenu';
 
 export default function Navbar() {
@@ -31,8 +30,6 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  console.log(user);
 
   return (
     <header

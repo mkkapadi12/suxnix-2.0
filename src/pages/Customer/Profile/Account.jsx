@@ -7,7 +7,7 @@ import ProfileForm from './components/ProfileForm';
 import CommonHero from '@/pages/components/CommonHero';
 import { Button } from '@/components/ui/button';
 
-const Profile = () => {
+const Account = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.user);
@@ -59,4 +59,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Account;
