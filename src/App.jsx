@@ -9,6 +9,7 @@ import Login from './pages/Customer/Auth/Login';
 import Contact from './pages/Contact';
 import Profile from './pages/Customer/Profile/Profile';
 import Addresses from './pages/Customer/Addresses/Addresses';
+import Settings from './pages/Customer/Settings/Settings';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: 'addresses',
         element: <Addresses />,
+      },
+      {
+        path: 'settings',
+        element: <Settings />,
       },
     ],
   },
