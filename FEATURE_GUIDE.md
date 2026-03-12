@@ -3,12 +3,14 @@
 ## For End Users
 
 ### Accessing Your Profile
+
 1. Log in to your Suxnix account
 2. Navigate to `/profile` or use the navigation menu
 3. View your personal information in the profile header
 4. Click "Edit Profile" to modify your details
 
 ### Profile Features
+
 - **View Mode**: See all your information at a glance
 - **Edit Mode**: Update the following:
   - First Name and Last Name
@@ -20,10 +22,12 @@
 - **Profile Picture**: Displays with initials fallback
 
 ### Managing Addresses
+
 1. Navigate to `/addresses` from the menu
 2. View all your saved addresses in card format
 
 ### Adding an Address
+
 1. Click "+ Add New Address" button
 2. Fill in all required fields:
    - Address Type (Home/Office/Other)
@@ -39,16 +43,19 @@
 4. Click "Add Address"
 
 ### Editing an Address
+
 1. Click "Edit" on the address card
 2. Modify any fields
 3. Click "Update Address"
 
 ### Deleting an Address
+
 1. Click "Delete" on the address card
 2. Confirm the deletion in the dialog
 3. Address will be removed
 
 ### Setting Default Address
+
 1. Click "Set as Default" on any address
 2. The address will be marked as default (shows badge)
 3. Any previous default will be automatically unset
@@ -107,6 +114,7 @@ server/
 ### Database Schema
 
 #### User Model (Extended)
+
 ```javascript
 {
   firstName: String,
@@ -123,6 +131,7 @@ server/
 ```
 
 #### Address Model (New)
+
 ```javascript
 {
   userId: ObjectId (ref: User),
@@ -144,10 +153,12 @@ server/
 ### API Endpoints
 
 #### Profile
+
 - `GET /auth/users/profile` - Fetch user profile (existing)
 - `PUT /auth/users/profile` - Update profile
 
 #### Addresses
+
 - `GET /auth/users/addresses` - Get all addresses
 - `POST /auth/users/addresses` - Create new address
 - `PUT /auth/users/addresses/:id` - Update address
@@ -159,6 +170,7 @@ All endpoints require authentication via `authMiddleware`.
 ### Redux State Structure
 
 #### Profile State
+
 ```javascript
 {
   profile: {
@@ -170,6 +182,7 @@ All endpoints require authentication via `authMiddleware`.
 ```
 
 #### Address State
+
 ```javascript
 {
   address: {
@@ -184,13 +197,14 @@ All endpoints require authentication via `authMiddleware`.
 ### Using Redux Actions
 
 #### Profile
+
 ```javascript
 import { updateProfile } from '@/Store/features/profile/profile.slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const MyComponent = () => {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector(state => state.profile);
+  const { loading, error } = useSelector((state) => state.profile);
 
   const handleUpdate = (data) => {
     dispatch(updateProfile(data))
@@ -206,13 +220,14 @@ const MyComponent = () => {
 ```
 
 #### Addresses
+
 ```javascript
 import {
   getAddresses,
   createAddress,
   updateAddress,
   deleteAddress,
-  setDefaultAddress
+  setDefaultAddress,
 } from '@/Store/features/address/address.slice';
 
 // Fetch all addresses
@@ -234,6 +249,7 @@ dispatch(setDefaultAddress(addressId));
 ### Form Validation (Zod Schemas)
 
 #### Profile Schema
+
 ```javascript
 import { profileSchema } from './schemas/profileSchema';
 
@@ -241,6 +257,7 @@ const { errors } = profileSchema.safeParse(formData);
 ```
 
 #### Address Schema
+
 ```javascript
 import { addressSchema } from './schemas/addressSchema';
 
@@ -250,24 +267,25 @@ const { errors } = addressSchema.safeParse(formData);
 ### Component Usage
 
 #### ProfileHeader
+
 ```jsx
 <ProfileHeader user={user} />
 ```
 
 #### ProfileForm
+
 ```jsx
 <ProfileForm user={user} />
 ```
 
 #### AddressCard
+
 ```jsx
-<AddressCard 
-  address={address} 
-  onEdit={(address) => handleEdit(address)} 
-/>
+<AddressCard address={address} onEdit={(address) => handleEdit(address)} />
 ```
 
 #### AddressForm
+
 ```jsx
 <AddressForm
   open={formOpen}
@@ -279,6 +297,7 @@ const { errors } = addressSchema.safeParse(formData);
 ### Styling Constants
 
 **Suxnix Colors**
+
 - Primary: `#faa432` (bg-suxnix-primary)
 - Secondary: `#0d9b4d` (bg-suxnix-secondary)
 - Heading: `#222222`
@@ -288,14 +307,13 @@ const { errors } = addressSchema.safeParse(formData);
 ### Error Handling
 
 All API calls include try-catch with proper error messages:
+
 ```javascript
 try {
   const result = await dispatch(updateProfile(data)).unwrap();
   toast.success('Success!');
 } catch (error) {
-  toast.error(
-    typeof error === 'string' ? error : error?.message || 'Failed'
-  );
+  toast.error(typeof error === 'string' ? error : error?.message || 'Failed');
 }
 ```
 
@@ -326,6 +344,7 @@ try {
 To add a new profile field:
 
 1. **Update User Model** (`server/models/user.model.js`)
+
 ```javascript
 newField: {
   type: String,
@@ -334,21 +353,19 @@ newField: {
 ```
 
 2. **Update Profile Schema** (`profileSchema.js`)
+
 ```javascript
-newField: z.string().optional()
+newField: z.string().optional();
 ```
 
 3. **Update ProfileForm** (`ProfileForm.jsx`)
+
 ```jsx
-<InputField
-  form={form}
-  name="newField"
-  label="New Field"
-  placeholder="..."
-/>
+<InputField form={form} name="newField" label="New Field" placeholder="..." />
 ```
 
 4. **Update Controller** (`user.controller.js`)
+
 ```javascript
 if (newField !== undefined) updateData.newField = newField;
 ```
@@ -358,6 +375,7 @@ if (newField !== undefined) updateData.newField = newField;
 To add a new address type:
 
 1. **Update Address Model** - Change enum:
+
 ```javascript
 type: {
   type: String,
@@ -367,16 +385,19 @@ type: {
 ```
 
 2. **Update Address Schema**:
+
 ```javascript
-type: z.enum(['Home', 'Office', 'Other', 'NewType'])
+type: z.enum(['Home', 'Office', 'Other', 'NewType']);
 ```
 
 3. **Update AddressForm** - Add option:
+
 ```jsx
 <option value="NewType">New Type</option>
 ```
 
 4. **Update AddressCard** - Add color:
+
 ```javascript
 case 'NewType':
   return 'bg-yellow-100 text-yellow-800';
@@ -392,16 +413,19 @@ case 'NewType':
 ### Testing
 
 #### Unit Tests
+
 - Test validation schemas independently
 - Test Redux reducers
 - Test component rendering
 
 #### Integration Tests
+
 - Test full CRUD flow for addresses
 - Test authentication redirects
 - Test form submissions
 
 #### E2E Tests
+
 - Navigate to profile page
 - Edit profile fields
 - Add/edit/delete addresses
@@ -426,6 +450,7 @@ case 'NewType':
 ## Quick Start for Developers
 
 1. **Setup**
+
    ```bash
    npm install
    npm run dev
