@@ -9,7 +9,7 @@ import Login from './pages/Customer/Auth/Login';
 import Contact from './pages/Contact';
 import Account from './pages/Customer/Profile/Account';
 import Addresses from './pages/Customer/Addresses/Addresses';
-import Settings from './pages/Customer/Profile/Settings/Settings';
+import Settings from './pages/Customer/Settings/Settings';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: 'addresses',
         element: <Addresses />,
+      },
+      {
+        path: 'settings',
+        element: <Settings />,
       },
     ],
   },
