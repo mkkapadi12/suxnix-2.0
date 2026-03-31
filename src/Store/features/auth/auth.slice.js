@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunk(
       return result;
     } catch (error) {
       return rejectWithValue(
-        error?.response?.data?.message || error?.message || 'Login failed',
+        error?.response?.data?.message || 'login Failed!',
       );
     }
   },

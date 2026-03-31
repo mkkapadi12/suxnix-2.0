@@ -16,7 +16,9 @@ const statusColors = {
 
 const OrdersTab = () => {
   const dispatch = useDispatch();
-  const { orders, loading, error, pagination } = useSelector((state) => state.order);
+  const { orders, loading, error, pagination } = useSelector(
+    (state) => state.order,
+  );
   const { toast } = useToast();
   const [selectedStatus, setSelectedStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +29,7 @@ const OrdersTab = () => {
         status: selectedStatus,
         page: currentPage,
         limit: 10,
-      })
+      }),
     );
   }, [dispatch, selectedStatus, currentPage]);
 
@@ -38,7 +40,7 @@ const OrdersTab = () => {
           cancelOrder({
             orderId,
             reason: 'User cancelled order',
-          })
+          }),
         ).unwrap();
         toast({
           title: 'Success',
@@ -88,22 +90,24 @@ const OrdersTab = () => {
         >
           All
         </button>
-        {['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map((status) => (
-          <button
-            key={status}
-            onClick={() => {
-              setSelectedStatus(status);
-              setCurrentPage(1);
-            }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              selectedStatus === status
-                ? 'bg-suxnix-primary text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            {status}
-          </button>
-        ))}
+        {['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(
+          (status) => (
+            <button
+              key={status}
+              onClick={() => {
+                setSelectedStatus(status);
+                setCurrentPage(1);
+              }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                selectedStatus === status
+                  ? 'bg-suxnix-primary text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {status}
+            </button>
+          ),
+        )}
       </div>
 
       {/* Orders List */}
@@ -113,7 +117,9 @@ const OrdersTab = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="font-semibold text-suxnix-heading">Order {order.orderNumber}</h3>
+                  <h3 className="font-semibold text-suxnix-heading">
+                    Order {order.orderNumber}
+                  </h3>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       statusColors[order.status] || statusColors.Pending
@@ -123,7 +129,9 @@ const OrdersTab = () => {
                   </span>
                 </div>
                 <div className="text-sm text-suxnix-body space-y-1">
-                  <p>Placed on: {new Date(order.createdAt).toLocaleDateString()}</p>
+                  <p>
+                    Placed on: {new Date(order.createdAt).toLocaleDateString()}
+                  </p>
                   <p>Items: {order.items.length}</p>
                   <p>Total: Rs. {order.totalAmount.toFixed(2)}</p>
                 </div>
@@ -148,7 +156,8 @@ const OrdersTab = () => {
             {order.trackingNumber && (
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <p className="text-sm text-suxnix-body">
-                  Tracking: <span className="font-semibold">{order.trackingNumber}</span>
+                  Tracking:{' '}
+                  <span className="font-semibold">{order.trackingNumber}</span>
                 </p>
               </div>
             )}

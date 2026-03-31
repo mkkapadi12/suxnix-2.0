@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const port = process.env.PORT || 3000;
 
 const user_routes = require('./routes/user.routes');
+const admin_routes = require('./routes/admin.routes');
 const errorMiddleware = require('./middlewares/error.middleware');
 
 //middleware
@@ -30,6 +31,7 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.get('/api', (req, res) => res.send('API is working!'));
 
 app.use('/api/auth/users', user_routes);
+app.use('/api/auth/admin', admin_routes);
 
 //error handling middleware
 app.use(errorMiddleware);

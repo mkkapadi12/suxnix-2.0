@@ -15,13 +15,13 @@ const Testimonials = () => {
   return (
     <Wrapper>
       <section
-        className="testimonial-bg relative z-1 bg-cover bg-center p-25 sm:m-[37px_0px_44px] flex items-center justify-center"
+        className="testimonial-bg relative z-1 bg-cover bg-center md:p-25 sm:m-[37px_0px_44px] flex items-center justify-center"
         style={{
           backgroundImage: `url("https://suxnix-dev.myshopify.com/cdn/shop/files/testimonial_bg.jpg?v=1739554820")`,
         }}
       >
         <div className="absolute bg-[#090909] opacity-[0.8] z-[-1] top-0 left-0 w-full h-full"></div>
-        <div className="container mx-auto lg:max-w-[1320px] lg:px-4 sm:px-6 px-3">
+        <div className="container mx-auto max-w-full lg:max-w-[1320px] lg:px-4 sm:px-6 px-3">
           <div className="flex">
             <Carousel className="w-full sm:max-w-[66%] mx-auto">
               <CarouselContent>

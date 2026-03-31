@@ -70,9 +70,9 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: [true, 'State is required'],
       },
-      postalCode: {
+      zipCode: {
         type: String,
-        required: [true, 'Postal code is required'],
+        required: [true, 'Zip code is required'],
       },
       country: {
         type: String,

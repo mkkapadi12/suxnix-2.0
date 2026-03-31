@@ -1,4 +1,4 @@
-import { privateAPI } from '../../services/privateAPI';
+import privateAPI from '../../services/privateAPI';
 
 export const getWishlistAPI = async () => {
   const response = await privateAPI.get('/user/wishlist');
