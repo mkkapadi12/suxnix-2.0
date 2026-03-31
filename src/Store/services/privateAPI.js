@@ -8,7 +8,10 @@ const privateAPI = axios.create({
 });
 
 privateAPI.interceptors.request.use((config) => {
-  const token = localStorage.getItem('suxnixToken');
+  // Check for admin token first, then user token
+  const adminToken = localStorage.getItem('suxnixAdminToken');
+  const userToken = localStorage.getItem('suxnixToken');
+  const token = adminToken || userToken;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
