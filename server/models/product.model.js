@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema(
     slug: {
       type: String,
       unique: true,
+      index: true,
       lowercase: true,
       sparse: true,
     },
@@ -26,12 +27,22 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'SKU is required'],
       unique: true,
+      index: true,
     },
 
     // Categorization
     category: {
       type: String,
-      enum: ['protein', 'vitamins', 'pre_workout', 'fat_burner', 'creatine', 'amino_acids', 'weight_gainer', 'other'],
+      enum: [
+        'protein',
+        'vitamins',
+        'pre_workout',
+        'fat_burner',
+        'creatine',
+        'amino_acids',
+        'weight_gainer',
+        'other',
+      ],
       required: [true, 'Category is required'],
     },
     subCategory: {
@@ -177,7 +188,8 @@ const productSchema = new mongoose.Schema(
 // Virtual for discount percentage
 productSchema.virtual('discountPercentage').get(function () {
   if (this.compareAtPrice && this.price) {
-    const discount = ((this.compareAtPrice - this.price) / this.compareAtPrice) * 100;
+    const discount =
+      ((this.compareAtPrice - this.price) / this.compareAtPrice) * 100;
     return Math.round(discount);
   }
   return 0;
@@ -189,7 +201,8 @@ productSchema.virtual('isInStock').get(function () {
 });
 
 // Pre-save hook to generate slug
-productSchema.pre('save', function (next) {
+productSchema.pre('save', function () {
+  // Generate slug
   if (this.isModified('name')) {
     this.slug = this.name
       .toLowerCase()
@@ -199,13 +212,11 @@ productSchema.pre('save', function (next) {
       .replace(/-+/g, '-');
   }
 
-  // Auto-set thumbnail from primary image
+  // Auto-set thumbnail
   if (this.images && this.images.length > 0) {
     const primaryImage = this.images.find((img) => img.isPrimary);
     this.thumbnail = primaryImage ? primaryImage.url : this.images[0].url;
   }
-
-  next();
 });
 
 // Indexes for performance

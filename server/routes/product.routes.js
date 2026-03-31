@@ -22,7 +22,10 @@ const {
   getProductStats,
 } = require('../controllers/product.controller');
 
-const { adminAuthMiddleware, requirePermission } = require('../middlewares/admin.middleware');
+const {
+  requirePermission,
+  adminAuthMiddleware,
+} = require('../middlewares/admin.middleware');
 
 const router = express.Router();
 
@@ -66,6 +69,8 @@ router.get(
   requirePermission('manage_products'),
   adminGetAllProducts,
 );
+
+console.log(typeof adminAuthMiddleware);
 
 // Create product
 router.post(

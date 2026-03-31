@@ -396,8 +396,17 @@ const createProduct = async (req, res, next) => {
     } = req.body;
 
     // Validate required fields
-    if (!name || !description || !sku || !category || price === undefined || stock === undefined) {
-      const error = new Error('Missing required fields: name, description, sku, category, price, stock');
+    if (
+      !name ||
+      !description ||
+      !sku ||
+      !category ||
+      price === undefined ||
+      stock === undefined
+    ) {
+      const error = new Error(
+        'Missing required fields: name, description, sku, category, price, stock',
+      );
       error.statusCode = 400;
       return next(error);
     }
@@ -718,9 +727,13 @@ const getProductStats = async (req, res, next) => {
   try {
     const totalProducts = await PRODUCT.countDocuments();
     const activeProducts = await PRODUCT.countDocuments({ status: 'active' });
-    const publishedProducts = await PRODUCT.countDocuments({ isPublished: true });
+    const publishedProducts = await PRODUCT.countDocuments({
+      isPublished: true,
+    });
     const featuredProducts = await PRODUCT.countDocuments({ isFeatured: true });
-    const bestsellerProducts = await PRODUCT.countDocuments({ isBestseller: true });
+    const bestsellerProducts = await PRODUCT.countDocuments({
+      isBestseller: true,
+    });
     const outOfStockProducts = await PRODUCT.countDocuments({ stock: 0 });
     const lowStockProducts = await PRODUCT.countDocuments({
       $expr: { $lte: ['$stock', '$lowStockThreshold'] },

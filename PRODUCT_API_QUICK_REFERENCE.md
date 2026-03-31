@@ -7,11 +7,13 @@ Base URL: `http://localhost:3000/api/products`
 ## Public Endpoints (No Authentication)
 
 ### Get All Products
+
 ```bash
 curl "http://localhost:3000/api/products"
 ```
 
 **Query Parameters:**
+
 - `page` - Page number (default: 1)
 - `limit` - Items per page (default: 12)
 - `category` - Filter by category (protein, vitamins, pre_workout, fat_burner, creatine, amino_acids, weight_gainer, other)
@@ -24,6 +26,7 @@ curl "http://localhost:3000/api/products"
 - `isBestseller` - true for bestsellers only
 
 **Example:**
+
 ```bash
 curl "http://localhost:3000/api/products?category=protein&search=whey&sort=price_asc&minPrice=1000&maxPrice=5000&page=1&limit=12"
 ```
@@ -31,6 +34,7 @@ curl "http://localhost:3000/api/products?category=protein&search=whey&sort=price
 ---
 
 ### Get Featured Products
+
 ```bash
 curl "http://localhost:3000/api/products/featured?limit=8"
 ```
@@ -38,6 +42,7 @@ curl "http://localhost:3000/api/products/featured?limit=8"
 ---
 
 ### Get Bestseller Products
+
 ```bash
 curl "http://localhost:3000/api/products/bestsellers?limit=8"
 ```
@@ -45,6 +50,7 @@ curl "http://localhost:3000/api/products/bestsellers?limit=8"
 ---
 
 ### Get Products by Category
+
 ```bash
 curl "http://localhost:3000/api/products/category/protein?page=1&limit=12"
 ```
@@ -54,6 +60,7 @@ curl "http://localhost:3000/api/products/category/protein?page=1&limit=12"
 ---
 
 ### Get Product by Slug
+
 ```bash
 curl "http://localhost:3000/api/products/suxnix-whey-protein-gold"
 ```
@@ -61,6 +68,7 @@ curl "http://localhost:3000/api/products/suxnix-whey-protein-gold"
 ---
 
 ### Get Product by ID
+
 ```bash
 curl "http://localhost:3000/api/products/id/670abc123def456789012345"
 ```
@@ -68,6 +76,7 @@ curl "http://localhost:3000/api/products/id/670abc123def456789012345"
 ---
 
 ### Get Related Products
+
 ```bash
 curl "http://localhost:3000/api/products/670abc123def456789012345/related"
 ```
@@ -77,18 +86,21 @@ curl "http://localhost:3000/api/products/670abc123def456789012345/related"
 ## Admin Endpoints (Require Authentication)
 
 All admin endpoints require:
+
 - `Authorization: Bearer <admin_jwt_token>` header
 - Admin must have `manage_products` permission
 
 ---
 
 ### Get All Products (Admin View)
+
 ```bash
 curl -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
   "http://localhost:3000/api/products/admin/all?page=1&limit=20"
 ```
 
 **Query Parameters:**
+
 - `page` - Page number
 - `limit` - Items per page
 - `category` - Filter by category
@@ -100,12 +112,14 @@ curl -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
 ---
 
 ### Get Product Statistics
+
 ```bash
 curl -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
   "http://localhost:3000/api/products/admin/stats"
 ```
 
 **Response includes:**
+
 - Total products, active, published, featured, bestseller
 - Out of stock, low stock counts
 - Count by category and status
@@ -113,6 +127,7 @@ curl -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
 ---
 
 ### Create Product
+
 ```bash
 curl -X POST \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -152,11 +167,13 @@ curl -X POST \
 ```
 
 **Required fields:**
+
 - name, description, sku, category, price, stock
 
 ---
 
 ### Update Product
+
 ```bash
 curl -X PUT \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -175,6 +192,7 @@ curl -X PUT \
 ---
 
 ### Delete Product
+
 ```bash
 curl -X DELETE \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -184,6 +202,7 @@ curl -X DELETE \
 ---
 
 ### Update Product Status
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -197,6 +216,7 @@ curl -X PATCH \
 ---
 
 ### Toggle Publish Status
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -208,6 +228,7 @@ curl -X PATCH \
 ---
 
 ### Toggle Featured
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -217,6 +238,7 @@ curl -X PATCH \
 ---
 
 ### Toggle Bestseller
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -226,6 +248,7 @@ curl -X PATCH \
 ---
 
 ### Update Stock
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -239,6 +262,7 @@ curl -X PATCH \
 ---
 
 ### Bulk Update Status
+
 ```bash
 curl -X PATCH \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
@@ -258,6 +282,7 @@ curl -X PATCH \
 ## Response Format
 
 ### Success Response (200 OK)
+
 ```json
 {
   "msg": "Products retrieved successfully!",
@@ -272,6 +297,7 @@ curl -X PATCH \
 ```
 
 ### Create Response (201 Created)
+
 ```json
 {
   "msg": "Product created successfully!",
@@ -288,6 +314,7 @@ curl -X PATCH \
 ```
 
 ### Error Response (400/404/401/403)
+
 ```json
 {
   "msg": "Error message here",
@@ -334,14 +361,14 @@ other
 
 ## Common Errors
 
-| Error | Status | Solution |
-|-------|--------|----------|
-| Missing required fields | 400 | Include name, description, sku, category, price, stock |
-| SKU already exists | 400 | Use unique SKU |
-| Product not found | 404 | Check product ID/slug |
-| Product must be active to publish | 400 | Set status to "active" first |
-| Unauthorized | 401 | Include valid Authorization header |
-| Permission denied | 403 | Admin must have manage_products permission |
+| Error                             | Status | Solution                                               |
+| --------------------------------- | ------ | ------------------------------------------------------ |
+| Missing required fields           | 400    | Include name, description, sku, category, price, stock |
+| SKU already exists                | 400    | Use unique SKU                                         |
+| Product not found                 | 404    | Check product ID/slug                                  |
+| Product must be active to publish | 400    | Set status to "active" first                           |
+| Unauthorized                      | 401    | Include valid Authorization header                     |
+| Permission denied                 | 403    | Admin must have manage_products permission             |
 
 ---
 
@@ -351,8 +378,8 @@ These fields appear in responses but aren't stored in database:
 
 ```json
 {
-  "discountPercentage": 17,  // (compareAtPrice - price) / compareAtPrice * 100
-  "isInStock": true          // stock > 0
+  "discountPercentage": 17, // (compareAtPrice - price) / compareAtPrice * 100
+  "isInStock": true // stock > 0
 }
 ```
 
