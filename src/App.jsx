@@ -11,6 +11,14 @@ import Account from './pages/Customer/Profile/Account';
 import Addresses from './pages/Customer/Addresses/Addresses';
 import Settings from './pages/Customer/Settings/Settings';
 
+// Admin imports
+import AdminLayout from './components/admin/AdminLayout';
+import AdminLogin from './pages/Admin/Auth/AdminLogin';
+import AdminRegister from './pages/Admin/Auth/AdminRegister';
+import AdminDashboard from './pages/Admin/Dashboard';
+import AdminProfile from './pages/Admin/Profile';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -53,6 +61,46 @@ const router = createBrowserRouter([
         path: 'settings',
         element: <Settings />,
       },
+    ],
+  },
+
+  // Admin routes
+  {
+    path: '/admin/login',
+    element: <AdminLogin />,
+    errorElement: <Error />,
+  },
+  {
+    path: '/admin/register',
+    element: <AdminRegister />,
+    errorElement: <Error />,
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedAdminRoute>
+        <AdminLayout />
+      </ProtectedAdminRoute>
+    ),
+    errorElement: <Error />,
+    children: [
+      {
+        path: 'dashboard',
+        element: <AdminDashboard />,
+      },
+      {
+        path: 'profile',
+        element: <AdminProfile />,
+      },
+      // Add more admin routes here as needed
+      // {
+      //   path: 'users',
+      //   element: <AdminUsers />,
+      // },
+      // {
+      //   path: 'products',
+      //   element: <AdminProducts />,
+      // },
     ],
   },
 ]);
