@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAdminProfile } from '@/Store/features/admin/admin.auth.slice';
 import { adminProfileSchema } from '../Schema/adminProfileSchema';
+import { ADMIN_ICONS } from '@/lib/icons/admin.icons';
 
 const AdminProfileForm = () => {
   const dispatch = useDispatch();
@@ -15,15 +16,9 @@ const AdminProfileForm = () => {
 
   const form = useForm({
     resolver: zodResolver(adminProfileSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-    },
+    defaultValues: { firstName: '', lastName: '', email: '', phone: '' },
   });
 
-  // Re-populate form fields whenever admin data loads (e.g. after page refresh)
   useEffect(() => {
     if (admin) {
       form.reset({
@@ -37,18 +32,12 @@ const AdminProfileForm = () => {
 
   const onSubmit = async (data) => {
     const toastId = toast.loading('Updating profile...');
-
     try {
       await dispatch(updateAdminProfile(data)).unwrap();
-
-      toast.success('Profile updated successfully!', {
-        id: toastId,
-      });
+      toast.success('Profile updated successfully!', { id: toastId });
     } catch (error) {
       toast.error(
-        typeof error === 'string'
-          ? error
-          : error?.message || 'Failed to update profile',
+        typeof error === 'string' ? error : error?.message || 'Failed to update profile',
         { id: toastId },
       );
     }
@@ -56,72 +45,52 @@ const AdminProfileForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* First Name */}
-          <div>
-            <InputField
-              form={form}
-              name="firstName"
-              label="First Name"
-              placeholder="Enter your first name"
-            />
-          </div>
-
-          {/* Last Name */}
-          <div>
-            <InputField
-              form={form}
-              name="lastName"
-              label="Last Name"
-              placeholder="Enter your last name"
-            />
-          </div>
-
-          {/* Email */}
-          <div className="md:col-span-2">
-            <InputField
-              form={form}
-              name="email"
-              label="Email"
-              type="email"
-              placeholder="Enter your email"
-              disabled
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Email cannot be changed. Contact a super admin to update your
-              email.
-            </p>
-          </div>
-
-          {/* Phone */}
-          <div className="md:col-span-2">
-            <InputField
-              form={form}
-              name="phone"
-              label="Phone Number (Optional)"
-              type="tel"
-              placeholder="Enter your phone number"
-            />
-          </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <InputField form={form} name="firstName" label="First Name" placeholder="Enter first name" />
+          <InputField form={form} name="lastName" label="Last Name" placeholder="Enter last name" />
         </div>
 
-        {/* Submit Button */}
-        <div className="flex gap-4">
+        <div>
+          <InputField
+            form={form}
+            name="email"
+            label="Email Address"
+            type="email"
+            placeholder="Enter email"
+            disabled
+          />
+          <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
+            <span className="w-1 h-1 bg-gray-400 rounded-full" />
+            Email cannot be changed. Contact a super admin.
+          </p>
+        </div>
+
+        <InputField
+          form={form}
+          name="phone"
+          label="Phone Number (Optional)"
+          type="tel"
+          placeholder="Enter phone number"
+        />
+
+        <div className="flex flex-wrap gap-3 pt-2">
           <Button
             type="submit"
             disabled={loading}
-            className="bg-suxnix-secondary hover:bg-green-700 text-white rounded-full px-8 py-6"
+            className="flex items-center gap-2 bg-[#0d9b4d] hover:bg-[#0a7d3e] text-white px-6 py-2.5 rounded-xl font-semibold shadow-md shadow-[#0d9b4d]/30 transition-all hover:-translate-y-0.5"
           >
-            {loading ? 'Updating...' : 'Update Profile'}
+            <ADMIN_ICONS.SAVE size={16} />
+            {loading ? 'Saving...' : 'Save Changes'}
           </Button>
           <Button
             type="button"
             variant="outline"
             onClick={() => form.reset()}
-            className="px-8 py-6 rounded-full"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold border-gray-200 text-gray-600 hover:bg-gray-50 transition-all"
           >
-            Cancel
+            <ADMIN_ICONS.ROTATECCW size={16} />
+            Reset
           </Button>
         </div>
       </form>
