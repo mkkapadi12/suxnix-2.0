@@ -22,7 +22,6 @@ const AdminNavbar = ({ onMenuClick }) => {
           </button>
           <Link to="/admin/dashboard" className="flex items-center gap-2">
             <img src={logo} alt="Suxnix" className="h-10 w-auto" />
-            <span className="text-xl font-bold text-suxnix-secondary">Admin</span>
           </Link>
         </div>
 

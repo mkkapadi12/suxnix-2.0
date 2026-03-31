@@ -6,7 +6,12 @@ const registerAdmin = async (req, res, next) => {
     const admin = req.body;
 
     // Validate required fields
-    if (!admin.firstName || !admin.lastName || !admin.email || !admin.password) {
+    if (
+      !admin.firstName ||
+      !admin.lastName ||
+      !admin.email ||
+      !admin.password
+    ) {
       const error = new Error('Missing required fields');
       error.statusCode = 400;
       return next(error);
@@ -147,7 +152,8 @@ const updateAdminProfile = async (req, res, next) => {
     if (gender !== undefined) updateData.gender = gender;
     if (dateOfBirth !== undefined) updateData.dateOfBirth = dateOfBirth;
     if (bio !== undefined) updateData.bio = bio;
-    if (profilePicture !== undefined) updateData.profilePicture = profilePicture;
+    if (profilePicture !== undefined)
+      updateData.profilePicture = profilePicture;
 
     const updatedAdmin = await ADMIN.findByIdAndUpdate(adminId, updateData, {
       runValidators: true,

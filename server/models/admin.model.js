@@ -100,20 +100,11 @@ const adminSchema = new mongoose.Schema(
 );
 
 // Secure the password with bcrypt
-adminSchema.pre('save', async function (next) {
-  const admin = this;
+adminSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
 
-  if (!admin.isModified('password')) {
-    next();
-  }
-
-  try {
-    const saltRound = await bcrypt.genSalt(10);
-    const hash_password = await bcrypt.hash(admin.password, saltRound);
-    admin.password = hash_password;
-  } catch (error) {
-    next(error);
-  }
+  const saltRound = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, saltRound);
 });
 
 // Generate JWT token

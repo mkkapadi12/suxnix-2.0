@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import AdminNavbar from './AdminNavbar';
 import AdminSidebar from './AdminSidebar';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getAdminProfile } from '@/Store/features/admin/admin.auth.slice';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAdminProfile());
+  }, [dispatch]);
 
   return (
     <div className="flex h-screen bg-gray-100">

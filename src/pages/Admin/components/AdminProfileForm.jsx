@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
@@ -16,18 +16,30 @@ const AdminProfileForm = () => {
   const form = useForm({
     resolver: zodResolver(adminProfileSchema),
     defaultValues: {
-      firstName: admin?.firstName || '',
-      lastName: admin?.lastName || '',
-      email: admin?.email || '',
-      phone: admin?.phone || '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
     },
   });
+
+  // Re-populate form fields whenever admin data loads (e.g. after page refresh)
+  useEffect(() => {
+    if (admin) {
+      form.reset({
+        firstName: admin.firstName || '',
+        lastName: admin.lastName || '',
+        email: admin.email || '',
+        phone: admin.phone || '',
+      });
+    }
+  }, [admin]);
 
   const onSubmit = async (data) => {
     const toastId = toast.loading('Updating profile...');
 
     try {
-      const result = await dispatch(updateAdminProfile(data)).unwrap();
+      await dispatch(updateAdminProfile(data)).unwrap();
 
       toast.success('Profile updated successfully!', {
         id: toastId,
@@ -77,7 +89,8 @@ const AdminProfileForm = () => {
               disabled
             />
             <p className="text-xs text-gray-500 mt-1">
-              Email cannot be changed. Contact a super admin to update your email.
+              Email cannot be changed. Contact a super admin to update your
+              email.
             </p>
           </div>
 

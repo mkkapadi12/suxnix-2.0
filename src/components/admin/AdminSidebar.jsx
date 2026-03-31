@@ -18,7 +18,7 @@ const AdminSidebar = ({ open, setOpen }) => {
     {
       label: 'Profile',
       href: '/admin/profile',
-      icon: PAGE_ICONS.USER,
+      icon: PAGE_ICONS.USERS,
       show: true,
     },
     {
@@ -100,13 +100,15 @@ const AdminSidebar = ({ open, setOpen }) => {
                   <item.icon
                     size={24}
                     className={cn(
-                      'flex-shrink-0 w-6 h-6',
+                      'shrink-0 w-6 h-6',
                       isActive(item.href)
                         ? 'text-white'
                         : 'text-suxnix-secondary',
                     )}
                   />
-                  {open && <span className="text-sm font-medium">{item.label}</span>}
+                  {open && (
+                    <span className="text-sm font-medium">{item.label}</span>
+                  )}
                 </Link>
               </li>
             ))}
@@ -145,7 +147,11 @@ const AdminSidebar = ({ open, setOpen }) => {
                 >
                   <item.icon
                     size={24}
-                    className={isActive(item.href) ? 'text-white' : 'text-suxnix-secondary'}
+                    className={
+                      isActive(item.href)
+                        ? 'text-white'
+                        : 'text-suxnix-secondary'
+                    }
                   />
                   <span className="text-sm font-medium">{item.label}</span>
                 </Link>

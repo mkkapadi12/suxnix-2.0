@@ -28,8 +28,9 @@ const AdminChangePasswordForm = () => {
     try {
       const result = await dispatch(
         changeAdminPassword({
-          oldPassword: data.oldPassword,
+          currentPassword: data.oldPassword,
           newPassword: data.newPassword,
+          confirmPassword: data.confirmPassword,
         }),
       ).unwrap();
 

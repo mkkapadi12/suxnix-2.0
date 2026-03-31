@@ -38,6 +38,7 @@ const AdminLoginForm = () => {
       form.reset();
       navigate('/admin/dashboard');
     } catch (error) {
+      console.log(error);
       toast.error(
         typeof error === 'string' ? error : error?.message || 'Login failed',
         { id: toastId },
@@ -72,7 +73,7 @@ const AdminLoginForm = () => {
             placeholder="Enter your password"
           />
         </div>
-        
+
         <div className="flex items-center justify-between">
           <Field orientation="horizontal" className="w-auto">
             <Checkbox

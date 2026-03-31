@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AdminProfileForm from './components/AdminProfileForm';
 import AdminChangePasswordForm from './components/AdminChangePasswordForm';
+import { getAdminProfile } from '@/Store/features/admin/admin.auth.slice';
 
 const Profile = () => {
-  const { admin } = useSelector((state) => state.adminAuth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAdminProfile());
+  }, [dispatch]);
 
   return (
     <div className="space-y-6">

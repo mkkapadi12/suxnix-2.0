@@ -2,7 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-const ProtectedAdminRoute = ({ children, requiredRole = null, requiredPermission = null }) => {
+const ProtectedAdminRoute = ({
+  children,
+  requiredRole = null,
+  requiredPermission = null,
+}) => {
   const { token, role, permissions } = useSelector((state) => state.adminAuth);
 
   // Check if admin is authenticated

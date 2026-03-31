@@ -26,6 +26,7 @@ import {
   Sparkles,
   Star,
   Twitter,
+  User,
   UserPen,
   X,
   XCircle,
@@ -59,6 +60,7 @@ export const PAGE_ICONS = {
   SEARCH: Search,
   GRID: LayoutGrid,
   DOWN: ChevronDownIcon,
+  USERS: User,
 
   //Social icons
   FACEBOOK: Facebook,

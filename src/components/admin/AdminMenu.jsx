@@ -57,7 +57,7 @@ const AdminMenu = () => {
           }}
           className="cursor-pointer"
         >
-          <PAGE_ICONS.USER className="w-4 h-4 mr-2" />
+          <PAGE_ICONS.USERS className="w-4 h-4 mr-2" />
           <span>Profile</span>
         </DropdownMenuItem>
 

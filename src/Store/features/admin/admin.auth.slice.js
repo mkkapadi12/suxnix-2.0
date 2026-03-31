@@ -39,21 +39,20 @@ export const loginAdmin = createAsyncThunk(
   async (data, { rejectWithValue, dispatch }) => {
     try {
       const result = await loginAdminAPI(data);
-
+      console.log(result);
       localStorage.setItem('suxnixAdminToken', result.token);
-      localStorage.setItem('suxnixAdminRole', result.admin.role);
+      localStorage.setItem('suxnixAdminRole', result.role);
       localStorage.setItem(
         'suxnixAdminPermissions',
-        JSON.stringify(result.admin.permissions || []),
+        JSON.stringify(result.permissions || []),
       );
 
       await dispatch(getAdminProfile());
 
       return result;
     } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || 'Login Failed!',
-      );
+      console.log(error);
+      return rejectWithValue(error?.response?.data?.message || 'Login Failed!');
     }
   },
 );
@@ -65,6 +64,7 @@ export const getAdminProfile = createAsyncThunk(
     try {
       return await getAdminProfileAPI();
     } catch (error) {
+      console.log(error);
       return rejectWithValue(
         error?.response?.data?.message ||
           error?.message ||
@@ -77,9 +77,11 @@ export const getAdminProfile = createAsyncThunk(
 // UPDATE ADMIN PROFILE
 export const updateAdminProfile = createAsyncThunk(
   'adminAuth/updateProfile',
-  async (data, { rejectWithValue }) => {
+  async (data, { rejectWithValue, dispatch }) => {
     try {
-      return await updateAdminProfileAPI(data);
+      const result = await updateAdminProfileAPI(data);
+      await dispatch(getAdminProfile());
+      return result;
     } catch (error) {
       return rejectWithValue(
         error?.response?.data?.message ||
@@ -146,8 +148,8 @@ const adminAuthSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.token = action.payload.token;
-        state.role = action.payload.admin.role;
-        state.permissions = action.payload.admin.permissions || [];
+        state.role = action.payload.role;
+        state.permissions = action.payload.permissions || [];
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.loading = false;
@@ -156,9 +158,9 @@ const adminAuthSlice = createSlice({
 
       // PROFILE
       .addCase(getAdminProfile.fulfilled, (state, action) => {
-        state.admin = action.payload.user;
-        state.role = action.payload.user.role;
-        state.permissions = action.payload.user.permissions || [];
+        state.admin = action.payload.admin;
+        state.role = action.payload.admin.role;
+        state.permissions = action.payload.admin.permissions || [];
       })
       .addCase(getAdminProfile.rejected, (state, action) => {
         state.admin = null;
@@ -175,9 +177,8 @@ const adminAuthSlice = createSlice({
       .addCase(updateAdminProfile.pending, (state) => {
         state.loading = true;
       })
-      .addCase(updateAdminProfile.fulfilled, (state, action) => {
+      .addCase(updateAdminProfile.fulfilled, (state) => {
         state.loading = false;
-        state.admin = action.payload.user;
       })
       .addCase(updateAdminProfile.rejected, (state, action) => {
         state.loading = false;
