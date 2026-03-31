@@ -5,6 +5,7 @@ Suxnix is a comprehensive e-commerce platform for Health & Wellness Supplements.
 ## 🚀 Tech Stack
 
 ### Frontend
+
 - **Framework:** React 19 + Vite
 - **Styling:** Tailwind CSS + custom Suxnix theme colors (`#faa432`, `#0d9b4d`)
 - **UI Components:** Radix UI / shadcn/ui
@@ -14,6 +15,7 @@ Suxnix is a comprehensive e-commerce platform for Health & Wellness Supplements.
 - **Icons & Notifications:** Lucide React, Sonner (Toasts)
 
 ### Backend
+
 - **Environment:** Node.js
 - **Framework:** Express.js
 - **Database:** MongoDB with Mongoose ODM
@@ -22,12 +24,14 @@ Suxnix is a comprehensive e-commerce platform for Health & Wellness Supplements.
 ## ✨ Core Features
 
 ### 👤 Profile Management
+
 - Comprehensive user profile dashboard.
 - **Editable Information:** First Name, Last Name, Phone Number, Gender, Date of Birth, and Biography.
 - **Security:** Immutable email addresses and password exclusion from standard profile payloads.
 - **User Experience:** Inline validation with Zod, edit/view toggle mode, responsive profile avatars.
 
 ### 📍 Address Management
+
 - Fully featured multi-address address book.
 - **Address Types:** Organize via categories (Home, Office, Other).
 - **Default Address:** Effortless tagging of a primary default address.
@@ -55,9 +59,11 @@ Suxnix is a comprehensive e-commerce platform for Health & Wellness Supplements.
 ## 🏁 Quick Start & Installation
 
 ### Prerequisites
+
 Make sure you have Node.js (v18+) and npm installed on your machine. You will also need access to a running MongoDB database.
 
 ### 1. Clone & Install
+
 Clone the repository and install all dependencies:
 
 ```bash
@@ -65,12 +71,14 @@ npm install
 ```
 
 ### 2. Environment Setup
+
 You'll need to set up your environment variables. Ensure the following variables are appropriately set in your backend `.env` file (or system environment):
 
 - `JWT_SECRET_KEY`: Your secure secret for generating JWT tokens.
 - `MONGODB_URI`: Your MongoDB connection string.
 
 ### 3. Start the Development Server
+
 Run the following command to start both the Vite development server and backend server (if concurrently configured), or start the frontend server:
 
 ```bash
@@ -84,10 +92,12 @@ Visit the local application in your browser (typically `http://localhost:5173`).
 All protected endpoints require authentication via `authMiddleware`.
 
 ### Profile
+
 - `GET /auth/users/profile` : Fetch authenticated user's profile
 - `PUT /auth/users/profile` : Update user's profile information
 
 ### Addresses
+
 - `GET /auth/users/addresses` : Fetch all user addresses
 - `POST /auth/users/addresses` : Add a new address
 - `PUT /auth/users/addresses/:id` : Update an existing address
@@ -95,6 +105,7 @@ All protected endpoints require authentication via `authMiddleware`.
 - `PATCH /auth/users/addresses/:id/set-default` : Set an address as default
 
 ## 🛡️ Security & Validations
+
 - **Frontend Validation:** Robust client-side validation using Zod prevents malformed data before hitting the API.
 - **Authorization:** Only address owners can modify or delete their respective address records. Protected API endpoints secure user data.
 - **Error Handling:** Graceful API and client-side error handling displaying actionable toast notifications.

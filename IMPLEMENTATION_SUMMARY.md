@@ -1,6 +1,7 @@
 # Profile & Address Management Implementation Summary
 
 ## Overview
+
 Successfully implemented Profile Management and Address Management features for the Suxnix Health & Wellness Supplements marketplace using Redux Toolkit, React, and MongoDB.
 
 ## Backend Changes
@@ -8,11 +9,13 @@ Successfully implemented Profile Management and Address Management features for 
 ### 1. Database Models
 
 #### User Model Extension (`server/models/user.model.js`)
+
 - Added profile fields: `phone`, `gender`, `dateOfBirth`, `bio`
 - Added address references: `addresses` array
 - All fields include proper validation and defaults
 
 #### New Address Model (`server/models/address.model.js`)
+
 - Complete schema for managing user addresses
 - Fields: userId, type, fullName, phoneNumber, addressLine1, addressLine2, city, state, zipCode, country, isDefault
 - Timestamps included
@@ -21,12 +24,14 @@ Successfully implemented Profile Management and Address Management features for 
 ### 2. Controllers
 
 #### User Controller Updates (`server/controllers/user.controller.js`)
+
 - **New Method: `updateProfile()`**
   - Updates user profile information (firstName, lastName, phone, gender, dateOfBirth, bio, profilePicture)
   - Excludes password fields from response
   - Uses validation via Zod schemas on frontend
 
 #### New Address Controller (`server/controllers/address.controller.js`)
+
 - **getAllAddresses()**: Fetch all addresses for authenticated user
 - **createAddress()**: Create new address, auto-handles default address logic
 - **updateAddress()**: Update existing address with ownership verification
@@ -36,6 +41,7 @@ Successfully implemented Profile Management and Address Management features for 
 ### 3. API Routes (`server/routes/user.routes.js`)
 
 New endpoints added:
+
 ```
 PUT /auth/users/profile                    - Update profile
 GET /auth/users/addresses                  - Get all addresses
@@ -52,26 +58,31 @@ All address routes include authentication middleware.
 ### 1. Redux Store Extensions
 
 #### Profile Slice (`src/Store/features/profile/profile.slice.js`)
+
 - State: loading, error, success
 - Actions: clearProfileError, clearProfileSuccess
 - Thunk: updateProfile() for API calls
 
 #### Address Slice (`src/Store/features/address/address.slice.js`)
+
 - State: addresses[], loading, error, success
 - Actions: clearAddressError, clearAddressSuccess
 - Thunks: getAddresses, createAddress, updateAddress, deleteAddress, setDefaultAddress
 - Intelligent state management with proper error handling
 
 #### Updated Store Configuration (`src/Store/store.js`)
+
 - Integrated profile and address slices
 - All reducers properly configured
 
 ### 2. API Services
 
 #### Profile API (`src/Store/features/profile/profileAPI.js`)
+
 - updateProfileAPI(): PUT request to update profile
 
 #### Address API (`src/Store/features/address/addressAPI.js`)
+
 - getAddressesAPI(): Fetch all addresses
 - createAddressAPI(): Create new address
 - updateAddressAPI(): Update address
@@ -81,17 +92,20 @@ All address routes include authentication middleware.
 ### 3. Profile Page Components
 
 #### Profile Page (`src/pages/Customer/Profile/Profile.jsx`)
+
 - Authentication check with redirect to login
 - Loads user profile if not already loaded
 - Clean, organized layout with sections
 
 #### ProfileHeader Component (`src/pages/Customer/Profile/components/ProfileHeader.jsx`)
+
 - Beautiful header with gradient background (Suxnix colors)
 - Profile picture display with initials fallback
 - User name, email, and bio display
 - Responsive design
 
 #### ProfileForm Component (`src/pages/Customer/Profile/components/ProfileForm.jsx`)
+
 - Toggle between view and edit modes
 - Form fields: firstName, lastName, phone, gender, dateOfBirth, bio
 - Email displayed as read-only
@@ -100,6 +114,7 @@ All address routes include authentication middleware.
 - Toast notifications for success/failure
 
 #### Profile Schema (`src/pages/Customer/Profile/schemas/profileSchema.js`)
+
 - Zod validation schema for profile data
 - Proper error messages
 - Optional fields for flexible updates
@@ -107,6 +122,7 @@ All address routes include authentication middleware.
 ### 4. Address Management Components
 
 #### Addresses Page (`src/pages/Customer/Addresses/Addresses.jsx`)
+
 - Main address management interface
 - Displays all saved addresses in responsive grid
 - Add new address button
@@ -114,6 +130,7 @@ All address routes include authentication middleware.
 - Integrates with Redux for address management
 
 #### AddressCard Component (`src/pages/Customer/Addresses/components/AddressCard.jsx`)
+
 - Beautiful card display for each address
 - Shows address type badge with color coding (Home, Office, Other)
 - Displays default address indicator
@@ -122,6 +139,7 @@ All address routes include authentication middleware.
 - Integrated delete confirmation
 
 #### AddressForm Component (`src/pages/Customer/Addresses/components/AddressForm.jsx`)
+
 - Dialog-based form for adding/editing addresses
 - All address fields: fullName, phoneNumber, addressLine1, addressLine2, city, state, zipCode, country, type
 - Set as default checkbox
@@ -131,11 +149,13 @@ All address routes include authentication middleware.
 - Toast notifications
 
 #### DeleteConfirmDialog Component (`src/pages/Customer/Addresses/components/DeleteConfirmDialog.jsx`)
+
 - Alert dialog for confirming address deletion
 - Clear messaging about the action
 - Cancel and Delete buttons
 
 #### Address Schema (`src/pages/Customer/Addresses/schemas/addressSchema.js`)
+
 - Zod validation for all address fields
 - Type enum validation
 - Proper error messages
@@ -144,6 +164,7 @@ All address routes include authentication middleware.
 ### 5. Routing
 
 Updated `src/App.jsx`:
+
 - Added route: `/profile` → Profile page
 - Added route: `/addresses` → Addresses management page
 - Both routes nested under Layout wrapper
@@ -152,15 +173,17 @@ Updated `src/App.jsx`:
 ## Key Features
 
 ### Profile Management
+
 ✅ View personal information  
 ✅ Edit profile details  
 ✅ Update phone, gender, date of birth, bio  
 ✅ Profile picture display with initials fallback  
 ✅ Edit/Save toggle for better UX  
 ✅ Form validation with clear error messages  
-✅ Loading states and toast notifications  
+✅ Loading states and toast notifications
 
 ### Address Management
+
 ✅ View all saved addresses  
 ✅ Add new addresses with full details  
 ✅ Edit existing addresses  
@@ -169,23 +192,25 @@ Updated `src/App.jsx`:
 ✅ Address type categorization (Home, Office, Other)  
 ✅ Responsive grid layout  
 ✅ Form validation  
-✅ Loading states and error handling  
+✅ Loading states and error handling
 
 ### Security
+
 ✅ Authentication checks on all pages  
 ✅ Address ownership verification on backend  
 ✅ Protected API endpoints with middleware  
 ✅ Password excluded from profile responses  
-✅ Proper error handling without exposing sensitive info  
+✅ Proper error handling without exposing sensitive info
 
 ### User Experience
+
 ✅ Responsive design (mobile, tablet, desktop)  
 ✅ Suxnix theme colors throughout  
 ✅ Toast notifications for all actions  
 ✅ Loading indicators  
 ✅ Empty states with helpful messages  
 ✅ Confirmation dialogs for destructive actions  
-✅ Edit/View mode toggle for profiles  
+✅ Edit/View mode toggle for profiles
 
 ## Styling
 
@@ -203,22 +228,26 @@ Updated `src/App.jsx`:
 ## Files Created
 
 ### Backend
+
 - `server/models/address.model.js`
 - `server/controllers/address.controller.js`
 
 ### Redux/Store
+
 - `src/Store/features/profile/profile.slice.js`
 - `src/Store/features/profile/profileAPI.js`
 - `src/Store/features/address/address.slice.js`
 - `src/Store/features/address/addressAPI.js`
 
 ### Profile Page
+
 - `src/pages/Customer/Profile/Profile.jsx`
 - `src/pages/Customer/Profile/components/ProfileHeader.jsx`
 - `src/pages/Customer/Profile/components/ProfileForm.jsx`
 - `src/pages/Customer/Profile/schemas/profileSchema.js`
 
 ### Address Pages
+
 - `src/pages/Customer/Addresses/Addresses.jsx`
 - `src/pages/Customer/Addresses/components/AddressCard.jsx`
 - `src/pages/Customer/Addresses/components/AddressForm.jsx`

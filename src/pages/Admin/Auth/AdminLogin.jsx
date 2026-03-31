@@ -2,10 +2,13 @@ import React from 'react';
 import CommonHero from '@/pages/components/CommonHero';
 import AdminLoginForm from './components/AdminLoginForm';
 import { Link } from 'react-router-dom';
+import Navbar from '@/components/navbar/Navbar';
+import Footer from '@/components/footer/Footer';
 
 const AdminLogin = () => {
   return (
     <div>
+      <Navbar />
       <main className="min-h-screen">
         <CommonHero title={'Admin Login'} />
 
@@ -40,6 +43,7 @@ const AdminLogin = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 };

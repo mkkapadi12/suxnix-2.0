@@ -22,6 +22,7 @@ This document outlines the complete authentication system for both **User** and 
 ### User Model (`server/models/user.model.js`)
 
 **Fields:**
+
 - `firstName` (String, Required)
 - `lastName` (String, Required)
 - `email` (String, Required, Unique)
@@ -36,10 +37,12 @@ This document outlines the complete authentication system for both **User** and 
 - `timestamps` (createdAt, updatedAt)
 
 **Methods:**
+
 - `generateToken()` - Generates JWT token (1 hour expiry)
 - `comparePassword(password)` - Compares provided password with hashed password
 
 **Security:**
+
 - Passwords are hashed using bcrypt with 10 salt rounds before saving
 - JWT tokens include: userId, email, firstName, lastName
 - Token secret: `process.env.JWT_SECRET_KEY`
@@ -51,12 +54,14 @@ This document outlines the complete authentication system for both **User** and 
 **Function:** `authMiddleware(req, res, next)`
 
 **Behavior:**
+
 - Extracts JWT token from Authorization header (`Bearer <token>`)
 - Verifies token validity
 - Fetches user data and attaches to `req.user`
 - Throws 401 error if token is missing or invalid
 
 **Usage:**
+
 ```javascript
 router.get('/profile', authMiddleware, getProfile);
 ```
@@ -95,31 +100,33 @@ router.get('/profile', authMiddleware, getProfile);
 ### Admin Model (`server/models/admin.model.js`)
 
 **Base Fields:** (Same as User)
+
 - firstName, lastName, email, password, confirmPassword
 - profilePicture, phone, gender, dateOfBirth, bio
 - timestamps
 
 **Additional Admin Fields:**
 
-| Field | Type | Options | Default | Description |
-|-------|------|---------|---------|-------------|
-| `role` | String | super_admin, admin, moderator | admin | Admin permission level |
-| `permissions` | Array | manage_users, manage_products, manage_orders, manage_admins, view_reports, manage_content | Based on role | Specific action permissions |
-| `isActive` | Boolean | true/false | true | Admin account status |
-| `lastLogin` | Date | Any date | null | Last login timestamp |
+| Field         | Type    | Options                                                                                   | Default       | Description                 |
+| ------------- | ------- | ----------------------------------------------------------------------------------------- | ------------- | --------------------------- |
+| `role`        | String  | super_admin, admin, moderator                                                             | admin         | Admin permission level      |
+| `permissions` | Array   | manage_users, manage_products, manage_orders, manage_admins, view_reports, manage_content | Based on role | Specific action permissions |
+| `isActive`    | Boolean | true/false                                                                                | true          | Admin account status        |
+| `lastLogin`   | Date    | Any date                                                                                  | null          | Last login timestamp        |
 
 **Methods:**
+
 - `generateToken()` - JWT with 24 hour expiry, includes role & permissions
 - `comparePassword(password)` - Bcrypt comparison
 - `hasPermission(permission)` - Checks if admin has specific permission
 
 **Permission Matrix:**
 
-| Role | Permissions |
-|------|-------------|
+| Role          | Permissions                                                                                     |
+| ------------- | ----------------------------------------------------------------------------------------------- |
 | `super_admin` | ALL (manage_users, manage_products, manage_orders, manage_admins, view_reports, manage_content) |
-| `admin` | manage_users, manage_products, manage_orders, view_reports, manage_content |
-| `moderator` | view_reports, manage_content |
+| `admin`       | manage_users, manage_products, manage_orders, view_reports, manage_content                      |
+| `moderator`   | view_reports, manage_content                                                                    |
 
 ---
 
@@ -137,12 +144,13 @@ router.get('/profile', authMiddleware, getProfile);
    - Higher-order middleware for permission checking
    - Returns 403 if permission not found
    - Usage:
+
    ```javascript
    router.delete(
      '/products/:id',
      adminAuthMiddleware,
      requirePermission('manage_products'),
-     deleteProduct
+     deleteProduct,
    );
    ```
 
@@ -155,7 +163,7 @@ router.get('/profile', authMiddleware, getProfile);
      '/manage-admins',
      adminAuthMiddleware,
      requireRole('admin'),
-     manageAdmins
+     manageAdmins,
    );
    ```
 
@@ -220,18 +228,21 @@ router.get('/profile', authMiddleware, getProfile);
 ## Security Features
 
 ### Password Security
+
 - Bcrypt hashing with 10 salt rounds
 - Minimum 6 characters required
 - Passwords never returned in responses
 - Password comparison using bcrypt to prevent timing attacks
 
 ### JWT Tokens
+
 - Signed with `process.env.JWT_SECRET_KEY`
 - User tokens: 1 hour expiry
 - Admin tokens: 24 hour expiry
 - Tokens include role and permission data for quicker authorization
 
 ### Authorization Levels
+
 1. **Public**: No authentication required
 2. **User-Protected**: Requires valid user JWT
 3. **Admin-Protected**: Requires valid admin JWT
@@ -239,6 +250,7 @@ router.get('/profile', authMiddleware, getProfile);
 5. **Permission-Protected**: Requires specific permission
 
 ### Account Status
+
 - Admin accounts can be deactivated
 - Inactive admins cannot login
 - Active status check on every protected request
@@ -335,6 +347,7 @@ Body: {
 All errors are handled by the centralized error middleware (`server/middlewares/error.middleware.js`).
 
 **Common Status Codes:**
+
 - `200` - Success
 - `201` - Created/Registered successfully
 - `400` - Bad request (missing fields, validation error)
@@ -345,6 +358,7 @@ All errors are handled by the centralized error middleware (`server/middlewares/
 - `500` - Server error
 
 **Error Response Format:**
+
 ```json
 {
   "error": "Error message",

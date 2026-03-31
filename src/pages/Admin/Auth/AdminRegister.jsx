@@ -2,10 +2,13 @@ import React from 'react';
 import CommonHero from '@/pages/components/CommonHero';
 import AdminRegisterForm from './components/AdminRegisterForm';
 import { Link } from 'react-router-dom';
+import Navbar from '@/components/navbar/Navbar';
+import Footer from '@/components/footer/Footer';
 
 const AdminRegister = () => {
   return (
     <div>
+      <Navbar />
       <main className="min-h-screen">
         <CommonHero title={'Admin Registration'} />
 
@@ -40,6 +43,7 @@ const AdminRegister = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 };

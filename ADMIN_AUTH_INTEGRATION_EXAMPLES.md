@@ -10,7 +10,8 @@ This document provides practical code examples for integrating the admin authent
 
 ```javascript
 // src/services/adminAuthService.js
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
 
 export const adminAuthService = {
   // Login admin
@@ -33,7 +34,10 @@ export const adminAuthService = {
       // Store token in localStorage
       localStorage.setItem('adminToken', data.token);
       localStorage.setItem('adminRole', data.role);
-      localStorage.setItem('adminPermissions', JSON.stringify(data.permissions));
+      localStorage.setItem(
+        'adminPermissions',
+        JSON.stringify(data.permissions),
+      );
       localStorage.setItem('adminId', data.adminId);
 
       return {
@@ -63,7 +67,7 @@ export const adminAuthService = {
       const response = await fetch(`${API_BASE_URL}/auth/admin/profile`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
@@ -94,7 +98,7 @@ export const adminAuthService = {
       const response = await fetch(`${API_BASE_URL}/auth/admin/profile`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updates),
@@ -123,18 +127,21 @@ export const adminAuthService = {
     try {
       const token = localStorage.getItem('adminToken');
 
-      const response = await fetch(`${API_BASE_URL}/auth/admin/change-password`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${API_BASE_URL}/auth/admin/change-password`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            currentPassword,
+            newPassword,
+            confirmPassword,
+          }),
         },
-        body: JSON.stringify({
-          currentPassword,
-          newPassword,
-          confirmPassword,
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -179,7 +186,9 @@ export const adminAuthService = {
 
   // Check if admin has permission
   hasPermission(permission) {
-    const permissions = JSON.parse(localStorage.getItem('adminPermissions') || '[]');
+    const permissions = JSON.parse(
+      localStorage.getItem('adminPermissions') || '[]',
+    );
     return permissions.includes(permission);
   },
 
@@ -272,7 +281,8 @@ import { adminAuthService } from '../services/adminAuthService';
 
 export function ProtectedAdminRoute({ children, requiredPermission }) {
   const isAuthenticated = adminAuthService.isAuthenticated();
-  const hasPermission = !requiredPermission || adminAuthService.hasPermission(requiredPermission);
+  const hasPermission =
+    !requiredPermission || adminAuthService.hasPermission(requiredPermission);
 
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" replace />;
@@ -349,7 +359,10 @@ export function useAdmin() {
 // server/routes/product.routes.js
 const express = require('express');
 const router = express.Router();
-const { adminAuthMiddleware, requirePermission } = require('../middlewares/admin.middleware');
+const {
+  adminAuthMiddleware,
+  requirePermission,
+} = require('../middlewares/admin.middleware');
 
 // Get all products (public)
 router.get('/', getAllProducts);
@@ -398,7 +411,9 @@ const createProduct = async (req, res, next) => {
     });
 
     // Log admin action
-    console.log(`[${new Date().toISOString()}] Admin ${adminId} created product ${product._id}`);
+    console.log(
+      `[${new Date().toISOString()}] Admin ${adminId} created product ${product._id}`,
+    );
 
     return res.status(201).json({
       msg: 'Product created successfully!',
@@ -430,7 +445,9 @@ const updateProduct = async (req, res, next) => {
     });
 
     // Log admin action
-    console.log(`[${new Date().toISOString()}] Admin ${adminId} updated product ${id}`);
+    console.log(
+      `[${new Date().toISOString()}] Admin ${adminId} updated product ${id}`,
+    );
 
     return res.status(200).json({
       msg: 'Product updated successfully!',
@@ -455,7 +472,9 @@ const deleteProduct = async (req, res, next) => {
     }
 
     // Log admin action
-    console.log(`[${new Date().toISOString()}] Admin ${adminId} deleted product ${id}`);
+    console.log(
+      `[${new Date().toISOString()}] Admin ${adminId} deleted product ${id}`,
+    );
 
     return res.status(200).json({
       msg: 'Product deleted successfully!',
@@ -482,7 +501,9 @@ const adminActionLog = (action) => {
 
       if (statusCode < 400) {
         // Log successful admin action
-        console.log(`[ADMIN ACTION] Admin: ${req.admin._id} | Action: ${action} | Status: ${statusCode} | Time: ${new Date().toISOString()}`);
+        console.log(
+          `[ADMIN ACTION] Admin: ${req.admin._id} | Action: ${action} | Status: ${statusCode} | Time: ${new Date().toISOString()}`,
+        );
 
         // Could also save to database
         // AdminLog.create({
@@ -613,7 +634,7 @@ const makeAdminRequest = async (url, options = {}) => {
     ...options,
     headers: {
       ...options.headers,
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
   });
@@ -653,7 +674,9 @@ function AdminDashboard() {
 
       <MainContent>
         <Header>
-          <p>Welcome, {admin?.firstName} {admin?.lastName}</p>
+          <p>
+            Welcome, {admin?.firstName} {admin?.lastName}
+          </p>
           <p>Role: {admin?.role}</p>
         </Header>
         <Routes>

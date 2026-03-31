@@ -9,29 +9,34 @@ This document summarizes the complete admin authentication system that has been 
 ## ✅ What Was Implemented
 
 ### 1. Admin Model (`server/models/admin.model.js`)
+
 A comprehensive MongoDB schema with:
+
 - **Base fields**: firstName, lastName, email, password, profilePicture, phone, gender, dateOfBirth, bio
-- **Admin-specific fields**: 
+- **Admin-specific fields**:
   - `role`: super_admin, admin, or moderator
   - `permissions`: Array of action permissions
   - `isActive`: Account status flag
   - `lastLogin`: Tracks last login time
 
 **Key Methods:**
+
 - `generateToken()` - Creates JWT with 24h expiry including role & permissions
 - `comparePassword()` - Securely compares passwords using bcrypt
 - `hasPermission()` - Checks if admin has specific permission
 
 ### 2. Admin Middleware (`server/middlewares/admin.middleware.js`)
+
 Three powerful middleware functions:
 
-| Middleware | Purpose | Returns |
-|-----------|---------|---------|
-| `adminAuthMiddleware` | Validates JWT and admin account status | req.admin, req.adminId, req.token |
-| `requirePermission(perm)` | Checks for specific permission | 403 if denied |
-| `requireRole(role)` | Checks for minimum role level | 403 if denied |
+| Middleware                | Purpose                                | Returns                           |
+| ------------------------- | -------------------------------------- | --------------------------------- |
+| `adminAuthMiddleware`     | Validates JWT and admin account status | req.admin, req.adminId, req.token |
+| `requirePermission(perm)` | Checks for specific permission         | 403 if denied                     |
+| `requireRole(role)`       | Checks for minimum role level          | 403 if denied                     |
 
 **Features:**
+
 - JWT verification and validation
 - Active status checking
 - Permission-based access control
@@ -39,21 +44,23 @@ Three powerful middleware functions:
 - Super admin role bypass for all restrictions
 
 ### 3. Admin Controller (`server/controllers/admin.controller.js`)
+
 Nine comprehensive controller functions:
 
-| Function | Purpose | Auth Required | Admin-Only |
-|----------|---------|---------------|-----------|
-| `registerAdmin` | Create new admin account | ❌ | ❌ |
-| `loginAdmin` | Admin login with credentials | ❌ | ❌ |
-| `getAdminProfile` | Retrieve admin profile | ✅ | ❌ |
-| `updateAdminProfile` | Update profile information | ✅ | ❌ |
-| `changePassword` | Change admin password | ✅ | ❌ |
-| `deactivateAdmin` | Deactivate own account | ✅ | ❌ |
-| `getAllAdmins` | List all admins | ✅ | ✅ |
-| `updateAdminRoleAndPermissions` | Change admin role/permissions | ✅ | ✅ |
-| `deactivateAdminAccount` | Deactivate other admins | ✅ | ✅ |
+| Function                        | Purpose                       | Auth Required | Admin-Only |
+| ------------------------------- | ----------------------------- | ------------- | ---------- |
+| `registerAdmin`                 | Create new admin account      | ❌            | ❌         |
+| `loginAdmin`                    | Admin login with credentials  | ❌            | ❌         |
+| `getAdminProfile`               | Retrieve admin profile        | ✅            | ❌         |
+| `updateAdminProfile`            | Update profile information    | ✅            | ❌         |
+| `changePassword`                | Change admin password         | ✅            | ❌         |
+| `deactivateAdmin`               | Deactivate own account        | ✅            | ❌         |
+| `getAllAdmins`                  | List all admins               | ✅            | ✅         |
+| `updateAdminRoleAndPermissions` | Change admin role/permissions | ✅            | ✅         |
+| `deactivateAdminAccount`        | Deactivate other admins       | ✅            | ✅         |
 
 ### 4. Admin Routes (`server/routes/admin.routes.js`)
+
 9 API endpoints organized by permission level:
 
 ```
@@ -96,44 +103,49 @@ POST   /api/auth/admin/deactivate/:id   [authMiddleware + adminRole]
 
 ### Available Permissions
 
-| Permission | Purpose |
-|-----------|---------|
-| `manage_users` | Create, read, update, delete user accounts |
-| `manage_products` | Create, read, update, delete products |
-| `manage_orders` | Create, read, update, delete orders |
-| `manage_admins` | Create and manage admin accounts |
-| `view_reports` | Access reporting and analytics |
-| `manage_content` | Manage website content and media |
+| Permission        | Purpose                                    |
+| ----------------- | ------------------------------------------ |
+| `manage_users`    | Create, read, update, delete user accounts |
+| `manage_products` | Create, read, update, delete products      |
+| `manage_orders`   | Create, read, update, delete orders        |
+| `manage_admins`   | Create and manage admin accounts           |
+| `view_reports`    | Access reporting and analytics             |
+| `manage_content`  | Manage website content and media           |
 
 ---
 
 ## 🔒 Security Features
 
 ### 1. Password Security
+
 - ✅ Bcrypt hashing (10 salt rounds)
 - ✅ Minimum 6 characters required
 - ✅ Passwords never exposed in responses
 - ✅ Constant-time comparison prevents timing attacks
 
 ### 2. JWT Token Security
+
 - ✅ Signed with `JWT_SECRET_KEY` environment variable
 - ✅ Token includes role & permissions for quick authorization
 - ✅ Admin tokens expire in 24 hours
 - ✅ User tokens expire in 1 hour
 
 ### 3. Account Security
+
 - ✅ Admin accounts can be deactivated
 - ✅ Inactive accounts blocked from login
 - ✅ Activity tracking (lastLogin)
 - ✅ Account status verified on every request
 
 ### 4. Authorization
+
 - ✅ Three-level authorization system:
   1. **Authentication**: Is the token valid?
   2. **Role-based**: Does the user have the right role?
   3. **Permission-based**: Does the user have the specific permission?
 
 ### 5. Input Validation
+
 - ✅ Required field validation
 - ✅ Email uniqueness checking
 - ✅ Password confirmation matching
@@ -144,23 +156,24 @@ POST   /api/auth/admin/deactivate/:id   [authMiddleware + adminRole]
 
 ## 📊 User vs Admin Authentication Comparison
 
-| Feature | User Auth | Admin Auth |
-|---------|-----------|-----------|
-| **Model** | Simple user profile | Role-based with permissions |
-| **Password Hashing** | Bcrypt ✅ | Bcrypt ✅ |
-| **JWT Expiry** | 1 hour | 24 hours |
-| **Roles** | ❌ Not supported | ✅ 3 levels |
-| **Permissions** | ❌ Not supported | ✅ 6 permissions |
-| **Account Status** | ❌ Not tracked | ✅ isActive flag |
-| **Last Login** | ❌ Not tracked | ✅ lastLogin |
-| **Permission Checking** | N/A | ✅ 2 middleware |
-| **Admin Management** | N/A | ✅ Manage other admins |
+| Feature                 | User Auth           | Admin Auth                  |
+| ----------------------- | ------------------- | --------------------------- |
+| **Model**               | Simple user profile | Role-based with permissions |
+| **Password Hashing**    | Bcrypt ✅           | Bcrypt ✅                   |
+| **JWT Expiry**          | 1 hour              | 24 hours                    |
+| **Roles**               | ❌ Not supported    | ✅ 3 levels                 |
+| **Permissions**         | ❌ Not supported    | ✅ 6 permissions            |
+| **Account Status**      | ❌ Not tracked      | ✅ isActive flag            |
+| **Last Login**          | ❌ Not tracked      | ✅ lastLogin                |
+| **Permission Checking** | N/A                 | ✅ 2 middleware             |
+| **Admin Management**    | N/A                 | ✅ Manage other admins      |
 
 ---
 
 ## 🚀 Usage Examples
 
 ### Admin Registration with Default Role
+
 ```bash
 curl -X POST http://localhost:3000/api/auth/admin/register \
   -H "Content-Type: application/json" \
@@ -181,6 +194,7 @@ Response: {
 ```
 
 ### Admin Login
+
 ```bash
 curl -X POST http://localhost:3000/api/auth/admin/login \
   -H "Content-Type: application/json" \
@@ -205,6 +219,7 @@ Response: {
 ```
 
 ### Using Admin Token to Get Profile
+
 ```bash
 curl -X GET http://localhost:3000/api/auth/admin/profile \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."
@@ -279,6 +294,7 @@ server/
 ## 🔧 How to Test
 
 ### Test Admin Registration
+
 ```bash
 # Register
 POST /api/auth/admin/register
@@ -292,6 +308,7 @@ POST /api/auth/admin/register
 ```
 
 ### Test Admin Login
+
 ```bash
 # Login
 POST /api/auth/admin/login
@@ -303,6 +320,7 @@ POST /api/auth/admin/login
 ```
 
 ### Test Protected Endpoint
+
 ```bash
 # Get Profile
 GET /api/auth/admin/profile
@@ -310,7 +328,9 @@ Header: Authorization: Bearer [YOUR_TOKEN]
 ```
 
 ### Test Permission Checking
+
 Any endpoint with `requirePermission` or `requireRole` will return 403 if:
+
 - Token is missing or invalid
 - Admin account is inactive
 - Admin doesn't have required permissions
@@ -321,6 +341,7 @@ Any endpoint with `requirePermission` or `requireRole` will return 403 if:
 ## 🎯 Integration Points
 
 The admin authentication system integrates seamlessly with:
+
 - ✅ Existing user auth system (separate tokens)
 - ✅ MongoDB database (admin collection)
 - ✅ JWT token validation
@@ -334,6 +355,7 @@ The admin authentication system integrates seamlessly with:
 To use this admin auth system in your application:
 
 1. **Ensure Environment Variables**
+
    ```env
    JWT_SECRET_KEY=your_secret_key_here
    MONGO_URI=mongodb://...
