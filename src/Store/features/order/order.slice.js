@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getOrders, getOrderById, createNewOrder, updateOrderStatusAPI, cancelOrderAPI } from './orderAPI';
+import {
+  getOrders,
+  getOrderById,
+  createNewOrder,
+  updateOrderStatusAPI,
+  cancelOrderAPI,
+} from './orderAPI';
 
 export const fetchOrders = createAsyncThunk(
   'order/fetchOrders',
@@ -8,9 +14,11 @@ export const fetchOrders = createAsyncThunk(
       const response = await getOrders(params);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to fetch orders');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to fetch orders',
+      );
     }
-  }
+  },
 );
 
 export const fetchOrderById = createAsyncThunk(
@@ -20,9 +28,11 @@ export const fetchOrderById = createAsyncThunk(
       const response = await getOrderById(orderId);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to fetch order');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to fetch order',
+      );
     }
-  }
+  },
 );
 
 export const createOrder = createAsyncThunk(
@@ -32,9 +42,11 @@ export const createOrder = createAsyncThunk(
       const response = await createNewOrder(orderData);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to create order');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to create order',
+      );
     }
-  }
+  },
 );
 
 export const updateOrderStatus = createAsyncThunk(
@@ -44,21 +56,27 @@ export const updateOrderStatus = createAsyncThunk(
       const response = await updateOrderStatusAPI(orderId, statusData);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to update order');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to update order',
+      );
     }
-  }
+  },
 );
 
 export const cancelOrder = createAsyncThunk(
   'order/cancelOrder',
   async ({ orderId, reason }, { rejectWithValue }) => {
     try {
-      const response = await cancelOrderAPI(orderId, { cancellationReason: reason });
+      const response = await cancelOrderAPI(orderId, {
+        cancellationReason: reason,
+      });
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to cancel order');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to cancel order',
+      );
     }
-  }
+  },
 );
 
 const initialState = {
@@ -142,7 +160,9 @@ const orderSlice = createSlice({
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.orders.findIndex((o) => o._id === action.payload.order._id);
+        const index = state.orders.findIndex(
+          (o) => o._id === action.payload.order._id,
+        );
         if (index !== -1) {
           state.orders[index] = action.payload.order;
         }
@@ -163,7 +183,9 @@ const orderSlice = createSlice({
       })
       .addCase(cancelOrder.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.orders.findIndex((o) => o._id === action.payload.order._id);
+        const index = state.orders.findIndex(
+          (o) => o._id === action.payload.order._id,
+        );
         if (index !== -1) {
           state.orders[index] = action.payload.order;
         }

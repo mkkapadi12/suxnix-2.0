@@ -178,24 +178,6 @@ const ProfileForm = ({ user }) => {
               placeholder="Enter phone number"
             />
 
-            {/* <div>
-              <label className="text-sm font-medium mb-2 block">Gender</label>
-              <select
-                {...form.register('gender')}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-suxnix-primary"
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-              {form.formState.errors.gender && (
-                <p className="text-red-500 text-sm mt-1">
-                  {form.formState.errors.gender.message}
-                </p>
-              )}
-            </div> */}
-
             <FormField
               control={form.control}
               name="gender"

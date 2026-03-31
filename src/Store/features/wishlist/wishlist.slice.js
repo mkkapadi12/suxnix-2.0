@@ -14,9 +14,11 @@ export const fetchWishlist = createAsyncThunk(
       const response = await getWishlistAPI();
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to fetch wishlist');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to fetch wishlist',
+      );
     }
-  }
+  },
 );
 
 export const addToWishlist = createAsyncThunk(
@@ -26,9 +28,11 @@ export const addToWishlist = createAsyncThunk(
       const response = await addToWishlistAPI(productData);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to add to wishlist');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to add to wishlist',
+      );
     }
-  }
+  },
 );
 
 export const removeFromWishlist = createAsyncThunk(
@@ -38,9 +42,11 @@ export const removeFromWishlist = createAsyncThunk(
       const response = await removeFromWishlistAPI(productId);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to remove from wishlist');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to remove from wishlist',
+      );
     }
-  }
+  },
 );
 
 export const clearWishlist = createAsyncThunk(
@@ -50,9 +56,11 @@ export const clearWishlist = createAsyncThunk(
       const response = await clearWishlistAPI();
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to clear wishlist');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to clear wishlist',
+      );
     }
-  }
+  },
 );
 
 export const checkInWishlist = createAsyncThunk(
@@ -62,9 +70,11 @@ export const checkInWishlist = createAsyncThunk(
       const response = await checkInWishlistAPI(productId);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to check wishlist');
+      return rejectWithValue(
+        error.response?.data?.msg || 'Failed to check wishlist',
+      );
     }
-  }
+  },
 );
 
 const initialState = {
@@ -154,10 +164,9 @@ const wishlistSlice = createSlice({
       });
 
     // Check in Wishlist
-    builder
-      .addCase(checkInWishlist.fulfilled, (state, action) => {
-        state.checkedProducts[action.meta.arg] = action.payload.isInWishlist;
-      });
+    builder.addCase(checkInWishlist.fulfilled, (state, action) => {
+      state.checkedProducts[action.meta.arg] = action.payload.isInWishlist;
+    });
   },
 });
 

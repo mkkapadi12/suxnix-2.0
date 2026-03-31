@@ -28,7 +28,14 @@ const getWishlist = async (req, res, next) => {
 const addToWishlist = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { productId, productName, productImage, price, category, description } = req.body;
+    const {
+      productId,
+      productName,
+      productImage,
+      price,
+      category,
+      description,
+    } = req.body;
 
     if (!productId || !productName || price === undefined) {
       return res.status(400).json({
@@ -46,7 +53,9 @@ const addToWishlist = async (req, res, next) => {
     }
 
     // Check if product already exists in wishlist
-    const existingItem = wishlist.items.find((item) => item.productId === productId);
+    const existingItem = wishlist.items.find(
+      (item) => item.productId === productId,
+    );
 
     if (existingItem) {
       return res.status(400).json({
@@ -88,7 +97,9 @@ const removeFromWishlist = async (req, res, next) => {
       });
     }
 
-    const itemIndex = wishlist.items.findIndex((item) => item.productId === productId);
+    const itemIndex = wishlist.items.findIndex(
+      (item) => item.productId === productId,
+    );
 
     if (itemIndex === -1) {
       return res.status(404).json({
@@ -147,7 +158,9 @@ const isInWishlist = async (req, res, next) => {
       });
     }
 
-    const isInWishlist = wishlist.items.some((item) => item.productId === productId);
+    const isInWishlist = wishlist.items.some(
+      (item) => item.productId === productId,
+    );
 
     return res.status(200).json({
       isInWishlist,
