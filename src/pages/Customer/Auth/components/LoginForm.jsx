@@ -11,7 +11,7 @@ import { Field } from '@/components/ui/field';
 import { toast } from 'sonner';
 import InputField from '@/components/form/InputField';
 import { loginSchema } from '../../Schema/loginSchema';
-import { loginUser } from '@/Store/features/auth/auth.slice';
+import { loginUser } from '@/Store/features/auth/user.auth.slice';
 
 const LoginForm = () => {
   const { loading, error, user } = useSelector((state) => state.user);

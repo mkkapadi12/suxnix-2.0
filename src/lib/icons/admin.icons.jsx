@@ -20,6 +20,13 @@ import {
   RotateCcw,
   KeyRound,
   ShieldCheck,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  AlertCircle,
+  TrendingUp,
+  Star,
+  AlertTriangle,
 } from 'lucide-react';
 
 export const ADMIN_ICONS = {
@@ -49,4 +56,13 @@ export const ADMIN_ICONS = {
   ROTATECCW: RotateCcw,
   KEYROUND: KeyRound,
   SHIELDCHECK: ShieldCheck,
+
+  //stats icons
+  CHECKCIRCLE2: CheckCircle2,
+  XCIRCLE: XCircle,
+  CLOCK: Clock,
+  STAR: Star,
+  ALERTCIRCLE: AlertCircle,
+  ALERTTRIANGLE: AlertTriangle,
+  TRENDINGUP: TrendingUp,
 };

@@ -70,8 +70,6 @@ router.get(
   adminGetAllProducts,
 );
 
-console.log(typeof adminAuthMiddleware);
-
 // Create product
 router.post(
   '/admin/create',

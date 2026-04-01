@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AdminProfileForm from './components/AdminProfileForm';
 import AdminChangePasswordForm from './components/AdminChangePasswordForm';
-import { getAdminProfile } from '@/Store/features/admin/admin.auth.slice';
+import { getAdminProfile } from '@/Store/features/admin/features/admin.auth.slice';
 import { ADMIN_ICONS } from '@/lib/icons/admin.icons';
 
-const Profile = () => {
+const AdminProfile = () => {
   const dispatch = useDispatch();
   const { admin, role, permissions } = useSelector((state) => state.adminAuth);
 
@@ -123,4 +123,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default AdminProfile;

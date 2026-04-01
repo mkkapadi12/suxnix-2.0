@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import InputField from '@/components/form/InputField';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateAdminProfile } from '@/Store/features/admin/admin.auth.slice';
+import { updateAdminProfile } from '@/Store/features/admin/features/admin.auth.slice';
 import { adminProfileSchema } from '../Schema/adminProfileSchema';
 import { ADMIN_ICONS } from '@/lib/icons/admin.icons';
 
@@ -37,7 +37,9 @@ const AdminProfileForm = () => {
       toast.success('Profile updated successfully!', { id: toastId });
     } catch (error) {
       toast.error(
-        typeof error === 'string' ? error : error?.message || 'Failed to update profile',
+        typeof error === 'string'
+          ? error
+          : error?.message || 'Failed to update profile',
         { id: toastId },
       );
     }
@@ -47,8 +49,18 @@ const AdminProfileForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <InputField form={form} name="firstName" label="First Name" placeholder="Enter first name" />
-          <InputField form={form} name="lastName" label="Last Name" placeholder="Enter last name" />
+          <InputField
+            form={form}
+            name="firstName"
+            label="First Name"
+            placeholder="Enter first name"
+          />
+          <InputField
+            form={form}
+            name="lastName"
+            label="Last Name"
+            placeholder="Enter last name"
+          />
         </div>
 
         <div>

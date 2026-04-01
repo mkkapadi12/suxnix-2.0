@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import InputField from '@/components/form/InputField';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeAdminPassword } from '@/Store/features/admin/admin.auth.slice';
+import { changeAdminPassword } from '@/Store/features/admin/features/admin.auth.slice';
 import { changePasswordSchema } from '../Schema/adminProfileSchema';
 import { ADMIN_ICONS } from '@/lib/icons/admin.icons';
 
@@ -34,7 +34,9 @@ const AdminChangePasswordForm = () => {
       form.reset();
     } catch (error) {
       toast.error(
-        typeof error === 'string' ? error : error?.message || 'Failed to change password',
+        typeof error === 'string'
+          ? error
+          : error?.message || 'Failed to change password',
         { id: toastId },
       );
     }
@@ -78,14 +80,20 @@ const AdminChangePasswordForm = () => {
 
         {/* Security tips */}
         <div className="flex items-start gap-3 bg-[#0d9b4d]/5 border border-[#0d9b4d]/20 rounded-xl p-4">
-          <ADMIN_ICONS.SHIELDCHECK size={18} className="text-[#0d9b4d] mt-0.5 shrink-0" />
+          <ADMIN_ICONS.SHIELDCHECK
+            size={18}
+            className="text-[#0d9b4d] mt-0.5 shrink-0"
+          />
           <div>
             <p className="text-sm font-semibold text-[#0d9b4d] mb-2">
               Password Security Tips
             </p>
             <ul className="space-y-1">
               {tipItems.map((tip, i) => (
-                <li key={i} className="flex items-center gap-2 text-xs text-gray-600">
+                <li
+                  key={i}
+                  className="flex items-center gap-2 text-xs text-gray-600"
+                >
                   <span className="w-1 h-1 bg-[#0d9b4d] rounded-full shrink-0" />
                   {tip}
                 </li>

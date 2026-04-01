@@ -7,7 +7,7 @@ import { adminRegisterSchema } from '../../Schema/adminRegisterSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerAdmin } from '@/Store/features/admin/admin.auth.slice';
+import { registerAdmin } from '@/Store/features/admin/features/admin.auth.slice';
 import { useNavigate } from 'react-router-dom';
 
 const AdminRegisterForm = () => {

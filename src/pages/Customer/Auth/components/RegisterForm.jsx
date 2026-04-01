@@ -7,7 +7,7 @@ import { registerSchema } from '../../Schema/registerSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '@/Store/features/auth/auth.slice';
+import { registerUser } from '@/Store/features/auth/user.auth.slice';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {

@@ -1,5 +1,5 @@
-import publicAPI from '../../services/publicAPI';
-import privateAPI from '../../services/privateAPI';
+import publicAPI from '../../../services/publicAPI';
+import privateAPI from '../../../services/privateAPI';
 
 export const registerAdminAPI = async (data) => {
   console.log(data);

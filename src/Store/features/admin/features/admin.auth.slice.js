@@ -5,7 +5,7 @@ import {
   registerAdminAPI,
   updateAdminProfileAPI,
   changeAdminPasswordAPI,
-} from './adminAuthAPI';
+} from '../api/admin.auth.api';
 
 const initialState = {
   admin: null,

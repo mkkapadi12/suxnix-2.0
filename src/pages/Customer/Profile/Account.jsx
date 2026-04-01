@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getProfile } from '@/Store/features/auth/auth.slice';
+import { getProfile } from '@/Store/features/auth/user.auth.slice';
 import ProfileHeader from './components/ProfileHeader';
 import ProfileForm from './components/ProfileForm';
 import CommonHero from '@/pages/components/CommonHero';

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { User, Settings, LogOut } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '@/Store/features/auth/auth.slice';
+import { logout } from '@/Store/features/auth/user.auth.slice';
 
 const UserMenu = () => {
   const { user } = useSelector((state) => state.user);

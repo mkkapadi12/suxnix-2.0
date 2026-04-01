@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logoutAdmin } from '@/Store/features/admin/admin.auth.slice';
+import { logoutAdmin } from '@/Store/features/admin/features/admin.auth.slice';
 import { toast } from 'sonner';
 import {
   DropdownMenu,

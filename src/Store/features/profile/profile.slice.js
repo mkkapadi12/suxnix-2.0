@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { updateProfileAPI } from './profileAPI';
-import { getProfile } from '../auth/auth.slice';
+import { getProfile } from '../auth/user.auth.slice';
 
 const initialState = {
   loading: false,

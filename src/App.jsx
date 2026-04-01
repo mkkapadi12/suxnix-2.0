@@ -16,8 +16,10 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './pages/Admin/Auth/AdminLogin';
 import AdminRegister from './pages/Admin/Auth/AdminRegister';
 import AdminDashboard from './pages/Admin/Dashboard';
-import AdminProfile from './pages/Admin/Profile';
+import AdminProfile from './pages/Admin/AdminProfile';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
+import AdminUsers from './pages/Admin/AdminUsers';
+import AdminProducts from './pages/Admin/products/AdminProducts';
 
 const router = createBrowserRouter([
   {
@@ -93,14 +95,14 @@ const router = createBrowserRouter([
         element: <AdminProfile />,
       },
       // Add more admin routes here as needed
-      // {
-      //   path: 'users',
-      //   element: <AdminUsers />,
-      // },
-      // {
-      //   path: 'products',
-      //   element: <AdminProducts />,
-      // },
+      {
+        path: 'users',
+        element: <AdminUsers />,
+      },
+      {
+        path: 'products',
+        element: <AdminProducts />,
+      },
     ],
   },
 ]);

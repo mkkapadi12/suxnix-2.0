@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Navbar from '../navbar/Navbar';
 import Footer from '../footer/Footer';
 import { Outlet } from 'react-router-dom';
-import { getProfile } from '@/Store/features/auth/auth.slice';
+import { getProfile } from '@/Store/features/auth/user.auth.slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Layout = () => {

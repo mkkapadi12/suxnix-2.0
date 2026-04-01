@@ -11,7 +11,7 @@ import { Field } from '@/components/ui/field';
 import { toast } from 'sonner';
 import InputField from '@/components/form/InputField';
 import { adminLoginSchema } from '../../Schema/adminLoginSchema';
-import { loginAdmin } from '@/Store/features/admin/admin.auth.slice';
+import { loginAdmin } from '@/Store/features/admin/features/admin.auth.slice';
 
 const AdminLoginForm = () => {
   const { loading, error } = useSelector((state) => state.adminAuth);

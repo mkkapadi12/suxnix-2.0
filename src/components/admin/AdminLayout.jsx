@@ -4,7 +4,11 @@ import AdminNavbar from './AdminNavbar';
 import AdminSidebar from './AdminSidebar';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getAdminProfile } from '@/Store/features/admin/admin.auth.slice';
+import { getAdminProfile } from '@/Store/features/admin/features/admin.auth.slice';
+import {
+  getAllProducts,
+  getProductStats,
+} from '@/Store/features/admin/features/admin.products.slice';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -12,6 +16,8 @@ const AdminLayout = () => {
 
   useEffect(() => {
     dispatch(getAdminProfile());
+    dispatch(getProductStats());
+    dispatch(getAllProducts());
   }, [dispatch]);
 
   return (

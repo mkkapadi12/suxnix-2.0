@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdminProfile } from '@/Store/features/admin/admin.auth.slice';
+import { getAdminProfile } from '@/Store/features/admin/features/admin.auth.slice';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Users,
@@ -16,31 +16,8 @@ import {
   Shield,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const StatCard = ({ title, value, icon: Icon, color, bg, change, show }) => {
-  if (!show) return null;
-  return (
-    <Card className="border-0 shadow-sm hover:shadow-md transition-shadow duration-200 rounded-2xl overflow-hidden">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <p className="text-sm text-gray-500 font-medium">{title}</p>
-            <p className="text-3xl font-bold text-[#222222]">{value}</p>
-            {change && (
-              <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
-                <ArrowUpRight size={12} />
-                {change} this month
-              </span>
-            )}
-          </div>
-          <div className={`p-3 rounded-xl ${bg}`}>
-            <Icon size={22} className={color} />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+import { StatCard } from './components/StatCard';
+import { ADMIN_ICONS } from '@/lib/icons/admin.icons';
 
 const QuickAction = ({ label, icon: Icon, to, color }) => (
   <Link
@@ -70,7 +47,7 @@ const Dashboard = () => {
     {
       title: 'Total Users',
       value: '1,234',
-      icon: Users,
+      icon: ADMIN_ICONS.USERS,
       color: 'text-blue-600',
       bg: 'bg-blue-50',
       change: '+12%',
@@ -79,7 +56,7 @@ const Dashboard = () => {
     {
       title: 'Total Orders',
       value: '5,678',
-      icon: ShoppingBag,
+      icon: ADMIN_ICONS.SHOPPINGBAG,
       color: 'text-[#0d9b4d]',
       bg: 'bg-[#0d9b4d]/10',
       change: '+8%',
@@ -88,7 +65,7 @@ const Dashboard = () => {
     {
       title: 'Products',
       value: '234',
-      icon: Package,
+      icon: ADMIN_ICONS.PACKAGE,
       color: 'text-purple-600',
       bg: 'bg-purple-50',
       change: '+3%',
@@ -97,7 +74,7 @@ const Dashboard = () => {
     {
       title: 'Revenue',
       value: '$45,678',
-      icon: TrendingUp,
+      icon: ADMIN_ICONS.TRENDINGUP,
       color: 'text-[#faa432]',
       bg: 'bg-[#faa432]/10',
       change: '+18%',
@@ -106,10 +83,30 @@ const Dashboard = () => {
   ];
 
   const recentActivity = [
-    { icon: CheckCircle2, text: 'New order #1042 placed', time: '2m ago', color: 'text-[#0d9b4d]' },
-    { icon: Clock, text: 'User Jane Doe registered', time: '15m ago', color: 'text-blue-500' },
-    { icon: AlertCircle, text: 'Low stock alert: Protein Shake', time: '1h ago', color: 'text-[#faa432]' },
-    { icon: CheckCircle2, text: 'Order #1039 shipped', time: '3h ago', color: 'text-[#0d9b4d]' },
+    {
+      icon: ADMIN_ICONS.CHECKCIRCLE2,
+      text: 'New order #1042 placed',
+      time: '2m ago',
+      color: 'text-[#0d9b4d]',
+    },
+    {
+      icon: ADMIN_ICONS.CLOCK,
+      text: 'User Jane Doe registered',
+      time: '15m ago',
+      color: 'text-blue-500',
+    },
+    {
+      icon: ADMIN_ICONS.ALERTCIRCLE,
+      text: 'Low stock alert: Protein Shake',
+      time: '1h ago',
+      color: 'text-[#faa432]',
+    },
+    {
+      icon: ADMIN_ICONS.CHECKCIRCLE2,
+      text: 'Order #1039 shipped',
+      time: '3h ago',
+      color: 'text-[#0d9b4d]',
+    },
   ];
 
   return (
@@ -133,7 +130,7 @@ const Dashboard = () => {
       {/* Stats grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <StatCard key={i} {...stat} />
+          <StatCard key={i} {...stat} size='md'/>
         ))}
       </div>
 
@@ -145,7 +142,8 @@ const Dashboard = () => {
             <div className="bg-linear-to-br from-[#1a1f2e] to-[#0d9b4d]/30 p-6 pb-10">
               <div className="flex items-center gap-3">
                 <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#0d9b4d] to-[#0a7d3e] flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-[#0d9b4d]/40">
-                  {admin?.firstName?.charAt(0)}{admin?.lastName?.charAt(0)}
+                  {admin?.firstName?.charAt(0)}
+                  {admin?.lastName?.charAt(0)}
                 </div>
                 <div>
                   <p className="font-bold text-white text-lg leading-tight">
@@ -164,7 +162,9 @@ const Dashboard = () => {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Shield size={14} className="text-gray-400 shrink-0" />
-                <span className="text-gray-500">{permissions.length} permissions</span>
+                <span className="text-gray-500">
+                  {permissions.length} permissions
+                </span>
               </div>
             </div>
             <div className="px-4 pb-4 pt-2">
@@ -217,16 +217,36 @@ const Dashboard = () => {
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {permissions.includes('manage_users') && (
-                <QuickAction label="View Users" icon={Users} to="/admin/users" color="bg-blue-50 text-blue-600" />
+                <QuickAction
+                  label="View Users"
+                  icon={Users}
+                  to="/admin/users"
+                  color="bg-blue-50 text-blue-600"
+                />
               )}
               {permissions.includes('manage_products') && (
-                <QuickAction label="Manage Products" icon={Package} to="/admin/products" color="bg-purple-50 text-purple-600" />
+                <QuickAction
+                  label="Manage Products"
+                  icon={Package}
+                  to="/admin/products"
+                  color="bg-purple-50 text-purple-600"
+                />
               )}
               {permissions.includes('manage_orders') && (
-                <QuickAction label="View Orders" icon={ShoppingBag} to="/admin/orders" color="bg-[#0d9b4d]/10 text-[#0d9b4d]" />
+                <QuickAction
+                  label="View Orders"
+                  icon={ShoppingBag}
+                  to="/admin/orders"
+                  color="bg-[#0d9b4d]/10 text-[#0d9b4d]"
+                />
               )}
               {permissions.includes('view_reports') && (
-                <QuickAction label="Reports" icon={TrendingUp} to="/admin/reports" color="bg-[#faa432]/10 text-[#faa432]" />
+                <QuickAction
+                  label="Reports"
+                  icon={TrendingUp}
+                  to="/admin/reports"
+                  color="bg-[#faa432]/10 text-[#faa432]"
+                />
               )}
             </div>
           </CardContent>
