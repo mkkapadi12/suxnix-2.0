@@ -98,7 +98,7 @@ export const updateProductStatus = createAsyncThunk(
 
 export const togglePublish = createAsyncThunk(
   'admin/products/togglePublish',
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       const result = await togglePublishAPI(id);
       return result;
@@ -215,7 +215,9 @@ const adminProductSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.formLoading = false;
-        const index = state.products.findIndex(p => p._id === action.payload.product._id);
+        const index = state.products.findIndex(
+          (p) => p._id === action.payload.product._id,
+        );
         if (index !== -1) {
           state.products[index] = action.payload.product;
         }
@@ -231,7 +233,7 @@ const adminProductSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.deleteLoading = false;
-        state.products = state.products.filter(p => p._id !== action.payload);
+        state.products = state.products.filter((p) => p._id !== action.payload);
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.deleteLoading = false;
@@ -244,7 +246,9 @@ const adminProductSlice = createSlice({
       })
       .addCase(updateProductStatus.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.products.findIndex(p => p._id === action.payload.product._id);
+        const index = state.products.findIndex(
+          (p) => p._id === action.payload.product._id,
+        );
         if (index !== -1) {
           state.products[index] = action.payload.product;
         }
@@ -256,7 +260,9 @@ const adminProductSlice = createSlice({
 
       // Toggle Publish
       .addCase(togglePublish.fulfilled, (state, action) => {
-        const index = state.products.findIndex(p => p._id === action.payload.product._id);
+        const index = state.products.findIndex(
+          (p) => p._id === action.payload.product._id,
+        );
         if (index !== -1) {
           state.products[index] = action.payload.product;
         }
@@ -264,7 +270,9 @@ const adminProductSlice = createSlice({
 
       // Toggle Featured
       .addCase(toggleFeatured.fulfilled, (state, action) => {
-        const index = state.products.findIndex(p => p._id === action.payload.product._id);
+        const index = state.products.findIndex(
+          (p) => p._id === action.payload.product._id,
+        );
         if (index !== -1) {
           state.products[index] = action.payload.product;
         }
@@ -272,7 +280,9 @@ const adminProductSlice = createSlice({
 
       // Toggle Bestseller
       .addCase(toggleBestseller.fulfilled, (state, action) => {
-        const index = state.products.findIndex(p => p._id === action.payload.product._id);
+        const index = state.products.findIndex(
+          (p) => p._id === action.payload.product._id,
+        );
         if (index !== -1) {
           state.products[index] = action.payload.product;
         }
@@ -280,7 +290,9 @@ const adminProductSlice = createSlice({
 
       // Update Stock
       .addCase(updateStock.fulfilled, (state, action) => {
-        const index = state.products.findIndex(p => p._id === action.payload.product._id);
+        const index = state.products.findIndex(
+          (p) => p._id === action.payload.product._id,
+        );
         if (index !== -1) {
           state.products[index] = action.payload.product;
         }
@@ -288,14 +300,17 @@ const adminProductSlice = createSlice({
 
       // Bulk Update Status
       .addCase(bulkUpdateStatus.fulfilled, (state, action) => {
-        state.products = state.products.map(product => {
-          const updated = action.payload.products.find(p => p._id === product._id);
+        state.products = state.products.map((product) => {
+          const updated = action.payload.products.find(
+            (p) => p._id === product._id,
+          );
           return updated || product;
         });
       });
   },
 });
 
-export const { setSelectedProduct, clearSelectedProduct } = adminProductSlice.actions;
+export const { setSelectedProduct, clearSelectedProduct } =
+  adminProductSlice.actions;
 
 export default adminProductSlice.reducer;

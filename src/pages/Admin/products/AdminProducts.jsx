@@ -79,76 +79,6 @@ const AdminProducts = () => {
   const [published, setPublished] = useState('all');
   const [sort, setSort] = useState('newest');
 
-  // Debounced search
-  const debouncedSearch = useCallback(
-    debounce((searchTerm) => {
-      const params = {};
-      if (searchTerm) params.search = searchTerm;
-      if (category !== 'all') params.category = category;
-      if (status !== 'all') params.status = status;
-      if (published !== 'all') params.isPublished = published === 'published';
-      
-      dispatch(getAllProducts(params));
-    }, 400),
-    [category, status, published, dispatch]
-  );
-
-  useEffect(() => {
-    dispatch(getAllProducts());
-    dispatch(getProductStats());
-  }, [dispatch]);
-
-  useEffect(() => {
-    debouncedSearch(search);
-  }, [search, debouncedSearch]);
-
-  const handleAddProduct = () => {
-    setSelectedProduct(null);
-    setFormOpen(true);
-  };
-
-  const handleEditProduct = (product) => {
-    setSelectedProduct(product);
-    setFormOpen(true);
-  };
-
-  const handleDeleteClick = (product) => {
-    setSelectedProduct(product);
-    setDeleteOpen(true);
-  };
-
-  const handleStockClick = (product) => {
-    setSelectedProduct(product);
-    setStockOpen(true);
-  };
-
-  const handleTogglePublish = async (product) => {
-    try {
-      await dispatch(togglePublish(product._id));
-      toast.success(product.isPublished ? 'Product unpublished' : 'Product published');
-    } catch (error) {
-      toast.error('Failed to update product');
-    }
-  };
-
-  const handleToggleFeatured = async (product) => {
-    try {
-      await dispatch(toggleFeatured(product._id));
-      toast.success(product.isFeatured ? 'Removed from featured' : 'Added to featured');
-    } catch (error) {
-      toast.error('Failed to update product');
-    }
-  };
-
-  const handleToggleBestseller = async (product) => {
-    try {
-      await dispatch(toggleBestseller(product._id));
-      toast.success(product.isBestseller ? 'Removed from bestseller' : 'Added to bestseller');
-    } catch (error) {
-      toast.error('Failed to update product');
-    }
-  };
-
   const statsData = [
     {
       title: 'Total Products',
@@ -201,15 +131,96 @@ const AdminProducts = () => {
     },
   ];
 
+  // Debounced search
+  const debouncedSearch = useCallback(
+    debounce((searchTerm) => {
+      const params = {};
+      if (searchTerm) params.search = searchTerm;
+      if (category !== 'all') params.category = category;
+      if (status !== 'all') params.status = status;
+      if (published !== 'all') params.isPublished = published === 'published';
+      params.sort = sort;
+      dispatch(getAllProducts(params));
+      dispatch(getProductStats());
+    }, 400),
+    [category, status, published, sort, dispatch],
+  );
+
+  useEffect(() => {
+    debouncedSearch(search);
+  }, [search, debouncedSearch]);
+
+  const handleAddProduct = () => {
+    setSelectedProduct(null);
+    setFormOpen(true);
+  };
+
+  const handleEditProduct = (product) => {
+    setSelectedProduct(product);
+    setFormOpen(true);
+  };
+
+  const handleDeleteClick = (product) => {
+    setSelectedProduct(product);
+    setDeleteOpen(true);
+  };
+
+  const handleStockClick = (product) => {
+    setSelectedProduct(product);
+    setStockOpen(true);
+  };
+
+  const handleTogglePublish = async (product) => {
+    try {
+      await dispatch(togglePublish(product._id)).unwrap();
+      toast.success(
+        product.isPublished ? 'Product unpublished' : 'Product published',
+      );
+    } catch (error) {
+      toast.error('Failed to update product');
+    }
+  };
+
+  const handleToggleFeatured = async (product) => {
+    try {
+      await dispatch(toggleFeatured(product._id)).unwrap();
+      toast.success(
+        product.isFeatured ? 'Removed from featured' : 'Added to featured',
+      );
+    } catch (error) {
+      toast.error('Failed to update product');
+    }
+  };
+
+  const handleToggleBestseller = async (product) => {
+    try {
+      await dispatch(toggleBestseller(product._id)).unwrap();
+      toast.success(
+        product.isBestseller
+          ? 'Removed from bestseller'
+          : 'Added to bestseller',
+      );
+    } catch (error) {
+      toast.error('Failed to update product');
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-[#222222]">Products</h1>
-          <p className="text-gray-500 text-sm mt-1">Manage and organize your product catalog.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#222222]">
+            Products
+          </h1>
+          <p className="text-gray-500 text-sm mt-1">
+            Manage and organize your product catalog.
+          </p>
         </div>
-        <Button onClick={handleAddProduct} className="bg-suxnix-primary hover:bg-suxnix-primary/90">
+        <Button
+          onClick={handleAddProduct}
+          className="bg-suxnix-primary hover:bg-suxnix-primary/90"
+        >
           <Plus size={16} className="mr-2" />
           Add Product
         </Button>
@@ -242,7 +253,7 @@ const AdminProducts = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  {CATEGORIES.map(cat => (
+                  {CATEGORIES.map((cat) => (
                     <SelectItem key={cat} value={cat}>
                       {cat.replace(/_/g, ' ')}
                     </SelectItem>
@@ -301,7 +312,11 @@ const AdminProducts = () => {
             <div className="flex flex-col items-center justify-center py-12">
               <ADMIN_ICONS.PACKAGE size={40} className="text-gray-300 mb-2" />
               <p className="text-gray-500 font-medium">No products found</p>
-              <Button onClick={handleAddProduct} variant="ghost" className="mt-4">
+              <Button
+                onClick={handleAddProduct}
+                variant="ghost"
+                className="mt-4"
+              >
                 <Plus size={16} className="mr-2" />
                 Create first product
               </Button>
@@ -327,24 +342,48 @@ const AdminProducts = () => {
                     <TableRow key={product._id} className="hover:bg-gray-50">
                       <TableCell>
                         <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                          <ADMIN_ICONS.PACKAGE size={20} className="text-gray-400" />
+                          {product.thumbnail ? (
+                            <img
+                              src={product.thumbnail}
+                              alt={product.name}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <ADMIN_ICONS.PACKAGE
+                              size={20}
+                              className="text-gray-400"
+                            />
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div>
-                          <p className="font-semibold text-[#222222]">{product.name}</p>
+                          <p className="font-semibold text-[#222222]">
+                            {product.name}
+                          </p>
                           <p className="text-xs text-gray-500">{product.sku}</p>
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-600">{product.category}</TableCell>
+                      <TableCell className="text-sm text-gray-600">
+                        {product.category}
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">
-                          <span className="font-semibold">${product.price}</span>
+                          <span className="font-semibold">
+                            ${product.price}
+                          </span>
                           {product.compareAtPrice && (
                             <>
-                              <span className="line-through text-gray-400 text-sm">${product.compareAtPrice}</span>
+                              <span className="line-through text-gray-400 text-sm">
+                                ${product.compareAtPrice}
+                              </span>
                               <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded">
-                                {Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}% off
+                                {Math.round(
+                                  ((product.compareAtPrice - product.price) /
+                                    product.compareAtPrice) *
+                                    100,
+                                )}
+                                % off
                               </span>
                             </>
                           )}
@@ -352,21 +391,36 @@ const AdminProducts = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <span className={`text-sm font-semibold ${
-                            product.stock === 0 ? 'text-red-600' : 
-                            product.stock <= (product.lowStockThreshold || 10) ? 'text-amber-600' : 
-                            'text-green-600'
-                          }`}>
+                          <span
+                            className={`text-sm font-semibold ${
+                              product.stock === 0
+                                ? 'text-red-600'
+                                : product.stock <=
+                                    (product.lowStockThreshold || 10)
+                                  ? 'text-amber-600'
+                                  : 'text-green-600'
+                            }`}
+                          >
                             {product.stock}
                           </span>
-                          {product.stock === 0 && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">Out</span>}
-                          {product.stock > 0 && product.stock <= (product.lowStockThreshold || 10) && (
-                            <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">Low</span>
+                          {product.stock === 0 && (
+                            <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded">
+                              Out
+                            </span>
                           )}
+                          {product.stock > 0 &&
+                            product.stock <=
+                              (product.lowStockThreshold || 10) && (
+                              <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
+                                Low
+                              </span>
+                            )}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${STATUS_BADGES[product.status] || STATUS_BADGES.draft}`}>
+                        <span
+                          className={`text-xs font-medium px-2 py-1 rounded-full ${STATUS_BADGES[product.status] || STATUS_BADGES.draft}`}
+                        >
                           {product.status}
                         </span>
                       </TableCell>
@@ -390,20 +444,25 @@ const AdminProducts = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEditProduct(product)}>
+                            <DropdownMenuItem
+                              onClick={() => handleEditProduct(product)}
+                            >
                               <Edit size={14} className="mr-2" />
                               Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleStockClick(product)}>
+                            <DropdownMenuItem
+                              onClick={() => handleStockClick(product)}
+                            >
                               Update Stock
                             </DropdownMenuItem>
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                               onClick={() => handleToggleBestseller(product)}
                               className="flex items-center"
                             >
-                              {product.isBestseller ? 'Remove from' : 'Mark as'} Bestseller
+                              {product.isBestseller ? 'Remove from' : 'Mark as'}{' '}
+                              Bestseller
                             </DropdownMenuItem>
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                               onClick={() => handleDeleteClick(product)}
                               className="text-red-600"
                             >

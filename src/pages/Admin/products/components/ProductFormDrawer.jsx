@@ -13,12 +13,7 @@ import {
   DrawerTitle,
   DrawerFooter,
 } from '@/components/ui/drawer';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,7 +25,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { createProduct, updateProduct } from '@/Store/features/admin/features/admin.products.slice';
+import {
+  createProduct,
+  updateProduct,
+} from '@/Store/features/admin/features/admin.products.slice';
 
 // Validation schema
 const productSchema = z.object({
@@ -45,10 +43,12 @@ const productSchema = z.object({
   compareAtPrice: z.coerce.number().optional(),
   stock: z.coerce.number().min(0, 'Stock cannot be negative'),
   lowStockThreshold: z.coerce.number().optional(),
-  weight: z.object({
-    value: z.coerce.number().optional(),
-    unit: z.string().optional(),
-  }).optional(),
+  weight: z
+    .object({
+      value: z.coerce.number().optional(),
+      unit: z.string().optional(),
+    })
+    .optional(),
   servingSize: z.string().optional(),
   servingsPerContainer: z.coerce.number().optional(),
   metaTitle: z.string().max(60).optional(),
@@ -77,7 +77,7 @@ export const ProductFormDrawer = ({
   productData,
 }) => {
   const dispatch = useDispatch();
-  const { formLoading, products } = useSelector(state => state.adminProducts);
+  const { formLoading, products } = useSelector((state) => state.adminProducts);
   const [selectedTab, setSelectedTab] = useState('basic');
 
   const {
@@ -104,16 +104,18 @@ export const ProductFormDrawer = ({
 
   const onSubmit = async (data) => {
     try {
-      const toastId = toast.loading(productId ? 'Updating product...' : 'Creating product...');
-      
+      const toastId = toast.loading(
+        productId ? 'Updating product...' : 'Creating product...',
+      );
+
       if (productId) {
-        await dispatch(updateProduct({ id: productId, data }));
+        await dispatch(updateProduct({ id: productId, data })).unwrap();
         toast.success('Product updated successfully', { id: toastId });
       } else {
-        await dispatch(createProduct(data));
+        await dispatch(createProduct(data)).unwrap();
         toast.success('Product created successfully', { id: toastId });
       }
-      
+
       onOpenChange(false);
       reset();
     } catch (error) {
@@ -130,15 +132,32 @@ export const ProductFormDrawer = ({
           </DrawerTitle>
         </DrawerHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex-1 overflow-y-auto">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex-1 overflow-y-auto"
+        >
+          <Tabs
+            value={selectedTab}
+            onValueChange={setSelectedTab}
+            className="w-full"
+          >
             <div className="px-6 pt-4 border-b sticky top-0 bg-white z-10">
               <TabsList className="grid w-full grid-cols-5 bg-gray-100 p-1 rounded-lg">
-                <TabsTrigger value="basic" className="text-xs sm:text-sm">Basic</TabsTrigger>
-                <TabsTrigger value="pricing" className="text-xs sm:text-sm">Pricing</TabsTrigger>
-                <TabsTrigger value="details" className="text-xs sm:text-sm">Details</TabsTrigger>
-                <TabsTrigger value="images" className="text-xs sm:text-sm">Images</TabsTrigger>
-                <TabsTrigger value="nutrition" className="text-xs sm:text-sm">Nutrition</TabsTrigger>
+                <TabsTrigger value="basic" className="text-xs sm:text-sm">
+                  Basic
+                </TabsTrigger>
+                <TabsTrigger value="pricing" className="text-xs sm:text-sm">
+                  Pricing
+                </TabsTrigger>
+                <TabsTrigger value="details" className="text-xs sm:text-sm">
+                  Details
+                </TabsTrigger>
+                <TabsTrigger value="images" className="text-xs sm:text-sm">
+                  Images
+                </TabsTrigger>
+                <TabsTrigger value="nutrition" className="text-xs sm:text-sm">
+                  Nutrition
+                </TabsTrigger>
               </TabsList>
             </div>
 
@@ -147,64 +166,94 @@ export const ProductFormDrawer = ({
               <TabsContent value="basic" className="space-y-4 mt-0">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 sm:col-span-1">
-                    <Label htmlFor="name" className="text-sm font-medium">Product Name *</Label>
+                    <Label htmlFor="name" className="text-sm font-medium">
+                      Product Name *
+                    </Label>
                     <Input
                       id="name"
                       {...register('name')}
                       placeholder="e.g., Whey Protein Powder"
                       className="mt-1"
                     />
-                    {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
+                    {errors.name && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
                   <div className="col-span-2 sm:col-span-1">
-                    <Label htmlFor="sku" className="text-sm font-medium">SKU *</Label>
+                    <Label htmlFor="sku" className="text-sm font-medium">
+                      SKU *
+                    </Label>
                     <Input
                       id="sku"
                       {...register('sku')}
                       placeholder="e.g., WHEY-1KG"
                       className="mt-1"
                     />
-                    {errors.sku && <p className="text-xs text-red-500 mt-1">{errors.sku.message}</p>}
+                    {errors.sku && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.sku.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="category" className="text-sm font-medium">Category *</Label>
+                    <Label htmlFor="category" className="text-sm font-medium">
+                      Category *
+                    </Label>
                     <Controller
                       name="category"
                       control={control}
                       render={({ field }) => (
-                        <Select value={field.value} onValueChange={field.onChange}>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
                           <SelectTrigger id="category" className="mt-1">
                             <SelectValue placeholder="Select category" />
                           </SelectTrigger>
                           <SelectContent>
-                            {CATEGORIES.map(cat => (
+                            {CATEGORIES.map((cat) => (
                               <SelectItem key={cat} value={cat}>
-                                {cat.replace(/_/g, ' ').charAt(0).toUpperCase() + cat.slice(1)}
+                                {cat
+                                  .replace(/_/g, ' ')
+                                  .charAt(0)
+                                  .toUpperCase() + cat.slice(1)}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       )}
                     />
-                    {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>}
+                    {errors.category && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.category.message}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <Label htmlFor="status" className="text-sm font-medium">Status</Label>
+                    <Label htmlFor="status" className="text-sm font-medium">
+                      Status
+                    </Label>
                     <Controller
                       name="status"
                       control={control}
                       render={({ field }) => (
-                        <Select value={field.value} onValueChange={field.onChange}>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
                           <SelectTrigger id="status" className="mt-1">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {STATUSES.map(status => (
+                            {STATUSES.map((status) => (
                               <SelectItem key={status} value={status}>
-                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                                {status.charAt(0).toUpperCase() +
+                                  status.slice(1)}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -215,7 +264,9 @@ export const ProductFormDrawer = ({
                 </div>
 
                 <div>
-                  <Label htmlFor="brand" className="text-sm font-medium">Brand</Label>
+                  <Label htmlFor="brand" className="text-sm font-medium">
+                    Brand
+                  </Label>
                   <Input
                     id="brand"
                     {...register('brand')}
@@ -225,7 +276,12 @@ export const ProductFormDrawer = ({
                 </div>
 
                 <div>
-                  <Label htmlFor="shortDescription" className="text-sm font-medium">Short Description</Label>
+                  <Label
+                    htmlFor="shortDescription"
+                    className="text-sm font-medium"
+                  >
+                    Short Description
+                  </Label>
                   <Textarea
                     id="shortDescription"
                     {...register('shortDescription')}
@@ -234,11 +290,15 @@ export const ProductFormDrawer = ({
                     className="mt-1 resize-none"
                     rows={2}
                   />
-                  <p className="text-xs text-gray-500 mt-1">{watch('shortDescription')?.length || 0}/200</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {watch('shortDescription')?.length || 0}/200
+                  </p>
                 </div>
 
                 <div>
-                  <Label htmlFor="description" className="text-sm font-medium">Description *</Label>
+                  <Label htmlFor="description" className="text-sm font-medium">
+                    Description *
+                  </Label>
                   <Textarea
                     id="description"
                     {...register('description')}
@@ -246,7 +306,11 @@ export const ProductFormDrawer = ({
                     className="mt-1 resize-none"
                     rows={4}
                   />
-                  {errors.description && <p className="text-xs text-red-500 mt-1">{errors.description.message}</p>}
+                  {errors.description && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.description.message}
+                    </p>
+                  )}
                 </div>
               </TabsContent>
 
@@ -254,7 +318,9 @@ export const ProductFormDrawer = ({
               <TabsContent value="pricing" className="space-y-4 mt-0">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="price" className="text-sm font-medium">Price *</Label>
+                    <Label htmlFor="price" className="text-sm font-medium">
+                      Price *
+                    </Label>
                     <Input
                       id="price"
                       type="number"
@@ -263,10 +329,19 @@ export const ProductFormDrawer = ({
                       placeholder="0.00"
                       className="mt-1"
                     />
-                    {errors.price && <p className="text-xs text-red-500 mt-1">{errors.price.message}</p>}
+                    {errors.price && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.price.message}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <Label htmlFor="compareAtPrice" className="text-sm font-medium">Compare at Price</Label>
+                    <Label
+                      htmlFor="compareAtPrice"
+                      className="text-sm font-medium"
+                    >
+                      Compare at Price
+                    </Label>
                     <Input
                       id="compareAtPrice"
                       type="number"
@@ -280,7 +355,9 @@ export const ProductFormDrawer = ({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="stock" className="text-sm font-medium">Stock *</Label>
+                    <Label htmlFor="stock" className="text-sm font-medium">
+                      Stock *
+                    </Label>
                     <Input
                       id="stock"
                       type="number"
@@ -288,10 +365,19 @@ export const ProductFormDrawer = ({
                       placeholder="0"
                       className="mt-1"
                     />
-                    {errors.stock && <p className="text-xs text-red-500 mt-1">{errors.stock.message}</p>}
+                    {errors.stock && (
+                      <p className="text-xs text-red-500 mt-1">
+                        {errors.stock.message}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <Label htmlFor="lowStockThreshold" className="text-sm font-medium">Low Stock Threshold</Label>
+                    <Label
+                      htmlFor="lowStockThreshold"
+                      className="text-sm font-medium"
+                    >
+                      Low Stock Threshold
+                    </Label>
                     <Input
                       id="lowStockThreshold"
                       type="number"
@@ -307,7 +393,12 @@ export const ProductFormDrawer = ({
               <TabsContent value="details" className="space-y-4 mt-0">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="weight.value" className="text-sm font-medium">Weight</Label>
+                    <Label
+                      htmlFor="weight.value"
+                      className="text-sm font-medium"
+                    >
+                      Weight
+                    </Label>
                     <Input
                       id="weight.value"
                       type="number"
@@ -317,18 +408,28 @@ export const ProductFormDrawer = ({
                     />
                   </div>
                   <div>
-                    <Label htmlFor="weight.unit" className="text-sm font-medium">Unit</Label>
+                    <Label
+                      htmlFor="weight.unit"
+                      className="text-sm font-medium"
+                    >
+                      Unit
+                    </Label>
                     <Controller
                       name="weight.unit"
                       control={control}
                       render={({ field }) => (
-                        <Select value={field.value || 'g'} onValueChange={field.onChange}>
+                        <Select
+                          value={field.value || 'g'}
+                          onValueChange={field.onChange}
+                        >
                           <SelectTrigger id="weight.unit" className="mt-1">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {WEIGHT_UNITS.map(unit => (
-                              <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                            {WEIGHT_UNITS.map((unit) => (
+                              <SelectItem key={unit} value={unit}>
+                                {unit}
+                              </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -339,7 +440,12 @@ export const ProductFormDrawer = ({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="servingSize" className="text-sm font-medium">Serving Size</Label>
+                    <Label
+                      htmlFor="servingSize"
+                      className="text-sm font-medium"
+                    >
+                      Serving Size
+                    </Label>
                     <Input
                       id="servingSize"
                       {...register('servingSize')}
@@ -348,7 +454,12 @@ export const ProductFormDrawer = ({
                     />
                   </div>
                   <div>
-                    <Label htmlFor="servingsPerContainer" className="text-sm font-medium">Servings per Container</Label>
+                    <Label
+                      htmlFor="servingsPerContainer"
+                      className="text-sm font-medium"
+                    >
+                      Servings per Container
+                    </Label>
                     <Input
                       id="servingsPerContainer"
                       type="number"
@@ -364,11 +475,15 @@ export const ProductFormDrawer = ({
               <TabsContent value="images" className="space-y-4 mt-0">
                 <div>
                   <Label className="text-sm font-medium">Images</Label>
-                  <p className="text-xs text-gray-500 mt-1">Image management coming soon</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Image management coming soon
+                  </p>
                 </div>
 
                 <div>
-                  <Label htmlFor="metaTitle" className="text-sm font-medium">Meta Title (max 60 chars)</Label>
+                  <Label htmlFor="metaTitle" className="text-sm font-medium">
+                    Meta Title (max 60 chars)
+                  </Label>
                   <Input
                     id="metaTitle"
                     {...register('metaTitle')}
@@ -376,11 +491,18 @@ export const ProductFormDrawer = ({
                     placeholder="SEO title"
                     className="mt-1"
                   />
-                  <p className="text-xs text-gray-500 mt-1">{watch('metaTitle')?.length || 0}/60</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {watch('metaTitle')?.length || 0}/60
+                  </p>
                 </div>
 
                 <div>
-                  <Label htmlFor="metaDescription" className="text-sm font-medium">Meta Description (max 160 chars)</Label>
+                  <Label
+                    htmlFor="metaDescription"
+                    className="text-sm font-medium"
+                  >
+                    Meta Description (max 160 chars)
+                  </Label>
                   <Textarea
                     id="metaDescription"
                     {...register('metaDescription')}
@@ -389,14 +511,18 @@ export const ProductFormDrawer = ({
                     className="mt-1 resize-none"
                     rows={3}
                   />
-                  <p className="text-xs text-gray-500 mt-1">{watch('metaDescription')?.length || 0}/160</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {watch('metaDescription')?.length || 0}/160
+                  </p>
                 </div>
               </TabsContent>
 
               {/* Nutrition Tab */}
               <TabsContent value="nutrition" className="space-y-4 mt-0">
                 <div>
-                  <Label htmlFor="ingredients" className="text-sm font-medium">Ingredients</Label>
+                  <Label htmlFor="ingredients" className="text-sm font-medium">
+                    Ingredients
+                  </Label>
                   <Textarea
                     id="ingredients"
                     placeholder="List ingredients"
@@ -416,11 +542,7 @@ export const ProductFormDrawer = ({
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={formLoading}
-            >
+            <Button type="submit" variant="primary" disabled={formLoading}>
               {formLoading ? 'Saving...' : 'Save Product'}
             </Button>
           </DrawerFooter>
