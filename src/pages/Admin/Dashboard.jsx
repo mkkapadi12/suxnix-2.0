@@ -7,11 +7,6 @@ import {
   ShoppingBag,
   Package,
   TrendingUp,
-  ArrowUpRight,
-  LayoutGrid,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
   User,
   Shield,
 } from 'lucide-react';
@@ -130,7 +125,7 @@ const Dashboard = () => {
       {/* Stats grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <StatCard key={i} {...stat} size='md'/>
+          <StatCard key={i} {...stat} size="md" />
         ))}
       </div>
 
