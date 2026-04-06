@@ -145,7 +145,9 @@ export const ProductInfo = ({ product, onAddToCart, onAddToWishlist }) => {
           {product.weight && (
             <div>
               <p className="text-xs text-gray-600 uppercase tracking-wide">Weight</p>
-              <p className="font-semibold text-gray-900">{product.weight}</p>
+              <p className="font-semibold text-gray-900">
+                {product.weight?.value}{product.weight?.unit}
+              </p>
             </div>
           )}
           {product.servingSize && (

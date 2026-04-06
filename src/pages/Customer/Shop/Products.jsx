@@ -23,14 +23,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import PageBreadcrumb from '@/components/ui/PageBreadcrumb';
 
 const Products = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { products, loading, filters, currentPage, pagination, error } = useSelector(
-    (state) => state.product
-  );
+  const { products, loading, filters, currentPage, pagination, error } =
+    useSelector((state) => state.product);
 
   const [filterOpen, setFilterOpen] = useState(false);
 
@@ -40,10 +39,17 @@ const Products = () => {
       search: searchParams.get('search') || '',
       category: searchParams.get('category') || '',
       sortBy: searchParams.get('sort') || 'newest',
+      isFeatured: searchParams.get('isFeatured') === 'true',
+      isBestseller: searchParams.get('isBestseller') === 'true',
       page: parseInt(searchParams.get('page')) || 1,
     };
 
-    if (params.search || params.category) {
+    if (
+      params.search ||
+      params.category ||
+      params.isFeatured ||
+      params.isBestseller
+    ) {
       dispatch(setFilters(params));
       dispatch(setCurrentPage(params.page));
     }
@@ -57,19 +63,22 @@ const Products = () => {
     debounce((newFilters) => {
       dispatch(setFilters(newFilters));
       dispatch(setCurrentPage(1));
-      
+
       // Update URL params
       const params = new URLSearchParams();
       if (newFilters.search) params.set('search', newFilters.search);
       if (newFilters.category) params.set('category', newFilters.category);
-      if (newFilters.sortBy) params.set('sort', newFilters.sortBy);
-      
+      if (newFilters.sortBy && newFilters.sortBy !== 'newest')
+        params.set('sort', newFilters.sortBy);
+      if (newFilters.isFeatured) params.set('isFeatured', 'true');
+      if (newFilters.isBestseller) params.set('isBestseller', 'true');
+
       setSearchParams(params.toString() ? `?${params.toString()}` : '');
-      
+
       // Fetch products
       dispatch(getAllProducts({ ...newFilters, page: 1 }));
     }, 300),
-    [dispatch, setSearchParams]
+    [dispatch, setSearchParams],
   );
 
   const handleSearchChange = (search) => {
@@ -90,7 +99,7 @@ const Products = () => {
       getAllProducts({
         ...filters,
         page,
-      })
+      }),
     );
 
     // Scroll to top
@@ -104,33 +113,25 @@ const Products = () => {
   };
 
   // Calculate total pages
-  const totalPages = pagination?.totalPages || 1;
+  const totalPages = pagination?.pages || 1;
   const pageNumbers = Array.from(
     { length: Math.min(5, totalPages) },
-    (_, i) => currentPage - 2 + i
+    (_, i) => currentPage - 2 + i,
   ).filter((page) => page > 0 && page <= totalPages);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <span className="text-gray-700">Products</span>
-          </BreadcrumbItem>
-        </Breadcrumb>
-      </div>
+    <div className="min-h-screen bg-gray-50 mt-30">
+      <PageBreadcrumb crumbs={[{ label: 'Products' }]} />
 
       {/* Page Header */}
       <div className="border-b bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Our Products</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+            Our Products
+          </h1>
           <p className="text-gray-600 mt-2">
-            Explore our comprehensive collection of health supplements and wellness products
+            Explore our comprehensive collection of health supplements and
+            wellness products
           </p>
         </div>
       </div>
@@ -226,7 +227,9 @@ const Products = () => {
                         {pageNumbers[0] > 1 && (
                           <>
                             <PaginationItem>
-                              <PaginationLink onClick={() => handlePageChange(1)}>
+                              <PaginationLink
+                                onClick={() => handlePageChange(1)}
+                              >
                                 1
                               </PaginationLink>
                             </PaginationItem>
@@ -248,11 +251,12 @@ const Products = () => {
 
                         {pageNumbers[pageNumbers.length - 1] < totalPages && (
                           <>
-                            {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
-                              <PaginationEllipsis />
-                            )}
+                            {pageNumbers[pageNumbers.length - 1] <
+                              totalPages - 1 && <PaginationEllipsis />}
                             <PaginationItem>
-                              <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                              <PaginationLink
+                                onClick={() => handlePageChange(totalPages)}
+                              >
                                 {totalPages}
                               </PaginationLink>
                             </PaginationItem>

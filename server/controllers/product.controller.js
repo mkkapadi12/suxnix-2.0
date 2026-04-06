@@ -23,7 +23,7 @@ const getAllProducts = async (req, res, next) => {
       isFeatured,
       isBestseller,
       search,
-      sort = 'newest',
+      sort = '',
       minPrice,
       maxPrice,
       page = 1,

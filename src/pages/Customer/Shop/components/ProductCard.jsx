@@ -6,18 +6,27 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
-export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist }) => {
+export const ProductCard = ({
+  product,
+  onQuickView,
+  onAddToCart,
+  onAddToWishlist,
+}) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
 
   if (!product) return null;
 
   const discountPercentage = product.compareAtPrice
-    ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
+    ? Math.round(
+        ((product.compareAtPrice - product.price) / product.compareAtPrice) *
+          100,
+      )
     : 0;
 
   const isOutOfStock = product.stock === 0;
-  const isLowStock = product.stock > 0 && product.stock <= (product.lowStockThreshold || 10);
+  const isLowStock =
+    product.stock > 0 && product.stock <= (product.lowStockThreshold || 10);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -51,7 +60,7 @@ export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist
           )}
 
           <img
-            src={product.primaryImage || '/placeholder-product.jpg'}
+            src={product.images[0].url || '/placeholder-product.jpg'}
             alt={product.name}
             loading="lazy"
             onLoad={() => setIsImageLoading(false)}
@@ -61,10 +70,14 @@ export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {isOutOfStock && (
-              <Badge className="bg-red-500 hover:bg-red-600">Out of Stock</Badge>
+              <Badge className="bg-red-500 hover:bg-red-600">
+                Out of Stock
+              </Badge>
             )}
             {!isOutOfStock && isLowStock && (
-              <Badge className="bg-amber-500 hover:bg-amber-600">Low Stock</Badge>
+              <Badge className="bg-amber-500 hover:bg-amber-600">
+                Low Stock
+              </Badge>
             )}
             {discountPercentage > 0 && (
               <Badge className="bg-suxnix-primary hover:bg-suxnix-primary/90">
@@ -72,10 +85,14 @@ export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist
               </Badge>
             )}
             {product.isFeatured && (
-              <Badge className="bg-yellow-500 hover:bg-yellow-600">Featured</Badge>
+              <Badge className="bg-yellow-500 hover:bg-yellow-600">
+                Featured
+              </Badge>
             )}
             {product.isBestseller && (
-              <Badge className="bg-purple-500 hover:bg-purple-600">Bestseller</Badge>
+              <Badge className="bg-purple-500 hover:bg-purple-600">
+                Bestseller
+              </Badge>
             )}
           </div>
 
@@ -101,7 +118,9 @@ export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist
           >
             <Heart
               size={18}
-              className={isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}
+              className={
+                isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'
+              }
             />
           </Button>
         </div>
@@ -110,7 +129,9 @@ export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist
         <CardContent className="flex-1 flex flex-col justify-between p-3 space-y-2">
           {/* Product Info */}
           <div className="flex-1">
-            <p className="text-xs text-gray-500 uppercase tracking-wide">{product.category}</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wide">
+              {product.category}
+            </p>
             <h3 className="font-semibold text-sm text-gray-800 line-clamp-2 group-hover:text-suxnix-primary transition-colors">
               {product.name}
             </h3>
@@ -131,14 +152,18 @@ export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist
                     />
                   ))}
                 </div>
-                <span className="text-xs text-gray-500">({product.reviewCount || 0})</span>
+                <span className="text-xs text-gray-500">
+                  ({product.reviewCount || 0})
+                </span>
               </div>
             )}
           </div>
 
           {/* Price Section */}
           <div className="flex items-baseline gap-2">
-            <span className="font-bold text-lg text-suxnix-primary">${product.price.toFixed(2)}</span>
+            <span className="font-bold text-lg text-suxnix-primary">
+              ${product.price.toFixed(2)}
+            </span>
             {product.compareAtPrice && (
               <span className="line-through text-xs text-gray-500">
                 ${product.compareAtPrice.toFixed(2)}
@@ -148,7 +173,9 @@ export const ProductCard = ({ product, onQuickView, onAddToCart, onAddToWishlist
 
           {/* Stock Status */}
           {!isOutOfStock && isLowStock && (
-            <p className="text-xs text-amber-600 font-medium">Only {product.stock} left</p>
+            <p className="text-xs text-amber-600 font-medium">
+              Only {product.stock} left
+            </p>
           )}
 
           {/* Add to Cart Button */}

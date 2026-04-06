@@ -30,8 +30,8 @@ export const ImageGallery = ({ images = [], productName = '' }) => {
       {/* Main Image */}
       <div className="relative w-full aspect-square bg-gray-100 rounded-lg overflow-hidden group">
         <img
-          src={mainImage}
-          alt={`${productName} - ${selectedIndex + 1}`}
+          src={mainImage.url}
+          alt={mainImage.alt || `${productName} - image ${selectedIndex + 1}`}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
 
@@ -87,7 +87,7 @@ export const ImageGallery = ({ images = [], productName = '' }) => {
               }`}
             >
               <img
-                src={image}
+                src={image.url}
                 alt={`${productName} - ${index + 1}`}
                 className="w-full h-full object-cover"
               />
@@ -101,8 +101,10 @@ export const ImageGallery = ({ images = [], productName = '' }) => {
         <DialogContent className="max-w-4xl w-screen h-screen p-0 bg-black/90">
           <div className="w-full h-full flex items-center justify-center relative">
             <img
-              src={mainImage}
-              alt={`${productName} - ${selectedIndex + 1}`}
+              src={mainImage.url}
+              alt={
+                mainImage.alt || `${productName} - image ${selectedIndex + 1}`
+              }
               className="max-w-full max-h-full object-contain"
             />
 

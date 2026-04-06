@@ -63,19 +63,27 @@ export const ProductTabs = ({ product }) => {
 
       {/* Nutrition Tab */}
       <TabsContent value="nutrition" className="space-y-4 mt-6">
-        {product.nutritionFacts ? (
+        {product.nutritionFacts && product.nutritionFacts.length > 0 ? (
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Nutrition Facts</h3>
-            <p className="text-sm text-gray-600 mb-3">Serving Size: {product.servingSize}</p>
+            {product.servingSize && (
+              <p className="text-sm text-gray-600 mb-3">Serving Size: {product.servingSize}</p>
+            )}
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b-2 border-gray-200">
+                    <th className="py-2 pr-4 text-left font-semibold text-gray-900">Nutrient</th>
+                    <th className="py-2 pr-4 text-right font-semibold text-gray-900">Amount</th>
+                    <th className="py-2 text-right font-semibold text-gray-900">Daily Value</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  {Object.entries(product.nutritionFacts).map(([key, value]) => (
-                    <tr key={key} className="border-b">
-                      <td className="py-2 pr-4 font-medium text-gray-900 capitalize">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </td>
-                      <td className="py-2 text-right text-gray-600">{value}</td>
+                  {product.nutritionFacts.map((fact, index) => (
+                    <tr key={fact._id || index} className="border-b">
+                      <td className="py-2 pr-4 font-medium text-gray-900">{fact.nutrient}</td>
+                      <td className="py-2 pr-4 text-right text-gray-600">{fact.amount}</td>
+                      <td className="py-2 text-right text-gray-500">{fact.dailyValue || '—'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -86,6 +94,7 @@ export const ProductTabs = ({ product }) => {
           <p className="text-gray-600">No nutrition information available</p>
         )}
       </TabsContent>
+
 
       {/* Ingredients Tab */}
       <TabsContent value="ingredients" className="space-y-4 mt-6">

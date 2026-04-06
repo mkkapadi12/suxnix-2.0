@@ -27,7 +27,7 @@ const CATEGORIES = [
 const BRANDS = ['Optimum Nutrition', 'Whey Gold', 'MuscleTech', 'BSN', 'Isopure'];
 
 export const FilterSidebar = ({ filters, onFiltersChange, isOpen, onClose }) => {
-  const [priceRange, setPriceRange] = useState([filters.minPrice || 0, filters.maxPrice || 500]);
+  const [priceRange, setPriceRange] = useState([filters.minPrice || 0, filters.maxPrice || 5000]);
 
   const handleCategoryChange = (category, checked) => {
     onFiltersChange({
@@ -50,30 +50,33 @@ export const FilterSidebar = ({ filters, onFiltersChange, isOpen, onClose }) => 
     });
   };
 
-  const handleFeatureChange = (feature, checked) => {
-    const features = filters.features || [];
-    onFiltersChange({
-      features: checked ? [...features, feature] : features.filter(f => f !== feature),
-    });
+  const handleFeaturedChange = (checked) => {
+    onFiltersChange({ isFeatured: checked });
+  };
+
+  const handleBestsellerChange = (checked) => {
+    onFiltersChange({ isBestseller: checked });
   };
 
   const handleClearFilters = () => {
     onFiltersChange({
       category: '',
       minPrice: 0,
-      maxPrice: 500,
+      maxPrice: 5000,
       brand: [],
-      features: [],
+      isFeatured: false,
+      isBestseller: false,
     });
-    setPriceRange([0, 500]);
+    setPriceRange([0, 5000]);
   };
 
   const hasActiveFilters =
     filters.category ||
     filters.minPrice > 0 ||
-    filters.maxPrice < 500 ||
+    filters.maxPrice < 5000 ||
     (filters.brand?.length > 0) ||
-    (filters.features?.length > 0);
+    filters.isFeatured ||
+    filters.isBestseller;
 
   const filterContent = (
     <div className="space-y-4">
@@ -145,7 +148,7 @@ export const FilterSidebar = ({ filters, onFiltersChange, isOpen, onClose }) => 
           <AccordionContent className="space-y-4">
             <Slider
               min={0}
-              max={500}
+              max={5000}
               step={10}
               value={priceRange}
               onValueChange={handlePriceChange}
@@ -192,8 +195,8 @@ export const FilterSidebar = ({ filters, onFiltersChange, isOpen, onClose }) => 
               </label>
               <Switch
                 id="featured"
-                checked={(filters.features || []).includes('featured')}
-                onCheckedChange={(checked) => handleFeatureChange('featured', checked)}
+                checked={!!filters.isFeatured}
+                onCheckedChange={handleFeaturedChange}
               />
             </div>
             <div className="flex items-center justify-between">
@@ -202,18 +205,8 @@ export const FilterSidebar = ({ filters, onFiltersChange, isOpen, onClose }) => 
               </label>
               <Switch
                 id="bestseller"
-                checked={(filters.features || []).includes('bestseller')}
-                onCheckedChange={(checked) => handleFeatureChange('bestseller', checked)}
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <label htmlFor="in-stock" className="text-sm cursor-pointer">
-                In Stock Only
-              </label>
-              <Switch
-                id="in-stock"
-                checked={(filters.features || []).includes('in-stock')}
-                onCheckedChange={(checked) => handleFeatureChange('in-stock', checked)}
+                checked={!!filters.isBestseller}
+                onCheckedChange={handleBestsellerChange}
               />
             </div>
           </AccordionContent>

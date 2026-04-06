@@ -18,7 +18,7 @@ export const getAllProducts = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to fetch products');
     }
-  }
+  },
 );
 
 export const getFeaturedProducts = createAsyncThunk(
@@ -28,9 +28,11 @@ export const getFeaturedProducts = createAsyncThunk(
       const result = await getFeaturedProductsAPI(limit);
       return result;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch featured products');
+      return rejectWithValue(
+        error.message || 'Failed to fetch featured products',
+      );
     }
-  }
+  },
 );
 
 export const getBestsellerProducts = createAsyncThunk(
@@ -40,9 +42,11 @@ export const getBestsellerProducts = createAsyncThunk(
       const result = await getBestsellerProductsAPI(limit);
       return result;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch bestseller products');
+      return rejectWithValue(
+        error.message || 'Failed to fetch bestseller products',
+      );
     }
-  }
+  },
 );
 
 export const getProductsByCategory = createAsyncThunk(
@@ -52,9 +56,11 @@ export const getProductsByCategory = createAsyncThunk(
       const result = await getProductsByCategoryAPI(category, params);
       return result;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch products by category');
+      return rejectWithValue(
+        error.message || 'Failed to fetch products by category',
+      );
     }
-  }
+  },
 );
 
 export const getProductBySlug = createAsyncThunk(
@@ -64,9 +70,11 @@ export const getProductBySlug = createAsyncThunk(
       const result = await getProductBySlugAPI(slug);
       return result;
     } catch (error) {
-      return rejectWithValue(error.message || 'Product not found');
+      return rejectWithValue(
+        error.response.data.message || 'Product not found',
+      );
     }
-  }
+  },
 );
 
 export const getProductById = createAsyncThunk(
@@ -78,7 +86,7 @@ export const getProductById = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message || 'Product not found');
     }
-  }
+  },
 );
 
 export const getRelatedProducts = createAsyncThunk(
@@ -88,9 +96,11 @@ export const getRelatedProducts = createAsyncThunk(
       const result = await getRelatedProductsAPI(productId);
       return result;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch related products');
+      return rejectWithValue(
+        error.message || 'Failed to fetch related products',
+      );
     }
-  }
+  },
 );
 
 const initialState = {
@@ -104,9 +114,10 @@ const initialState = {
     search: '',
     category: '',
     minPrice: 0,
-    maxPrice: Infinity,
+    maxPrice: 5000,
     brand: [],
-    features: [],
+    isFeatured: false,
+    isBestseller: false,
     sortBy: 'newest',
   },
   currentPage: 1,
@@ -239,7 +250,12 @@ const productSlice = createSlice({
   },
 });
 
-export const { setFilters, resetFilters, setCurrentPage, clearCurrentProduct, clearError } =
-  productSlice.actions;
+export const {
+  setFilters,
+  resetFilters,
+  setCurrentPage,
+  clearCurrentProduct,
+  clearError,
+} = productSlice.actions;
 
 export default productSlice.reducer;

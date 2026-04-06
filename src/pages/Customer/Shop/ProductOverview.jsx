@@ -1,31 +1,36 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductBySlug, clearCurrentProduct } from '@/Store/features/product/product.slice';
+import {
+  getProductBySlug,
+  clearCurrentProduct,
+} from '@/Store/features/product/product.slice';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { AlertCircle } from 'lucide-react';
 
 import ImageGallery from './components/ImageGallery';
 import ProductInfo from './components/ProductInfo';
 import ProductTabs from './components/ProductTabs';
 import RelatedProducts from './components/RelatedProducts';
+import PageBreadcrumb from '@/components/ui/PageBreadcrumb';
 
 const ProductOverview = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentProduct, detailLoading, error } = useSelector((state) => state.product);
+  const { currentProduct, detailLoading, error } = useSelector(
+    (state) => state.product,
+  );
 
   useEffect(() => {
-    if (slug) {
-      dispatch(getProductBySlug(slug));
-    }
-
-    return () => {
-      dispatch(clearCurrentProduct());
-    };
+    dispatch(getProductBySlug(slug));
   }, [slug, dispatch]);
 
   if (detailLoading) {
@@ -62,29 +67,33 @@ const ProductOverview = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white py-8">
+      <div className="min-h-screen bg-white py-8 mt-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/products">Products</BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
+          <PageBreadcrumb
+            crumbs={[
+              { label: 'Products', href: '/products' },
+              { label: 'Product Not Found', href: '#' },
+            ]}
+          />
 
           <div className="mt-8 flex flex-col items-center justify-center py-12">
             <AlertCircle size={48} className="text-red-500 mb-4" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Product Not Found</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Product Not Found
+            </h1>
             <p className="text-gray-600 mb-6 text-center max-w-sm">
-              {error || 'The product you are looking for does not exist or has been removed.'}
+              {
+                'The product you are looking for does not exist or has been removed.'
+              }
             </p>
             <div className="flex gap-4">
               <Button onClick={() => navigate('/products')} variant="outline">
                 Back to Products
               </Button>
-              <Button onClick={() => navigate('/')} className="bg-suxnix-primary hover:bg-suxnix-primary/90">
+              <Button
+                onClick={() => navigate('/')}
+                className="bg-suxnix-primary hover:bg-suxnix-primary/90"
+              >
                 Go to Home
               </Button>
             </div>
@@ -98,35 +107,27 @@ const ProductOverview = () => {
     return null;
   }
 
-  const images = [
-    currentProduct.primaryImage,
-    ...(currentProduct.images || []),
-  ].filter(Boolean);
+  // images is an array of { url, alt, isPrimary } — sort so primary is first
+  const images = (currentProduct.images || [])
+    .slice()
+    .sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0));
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white mt-30">
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 border-b">
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/products">Products</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <span className="text-gray-700">{currentProduct.category}</span>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <span className="text-gray-700 font-semibold line-clamp-1">
-              {currentProduct.name}
-            </span>
-          </BreadcrumbItem>
-        </Breadcrumb>
-      </div>
+      <PageBreadcrumb
+        crumbs={[
+          { label: 'Products', href: '/products' },
+          {
+            label: currentProduct.category,
+            href: `/products?category=${currentProduct.category}`,
+          },
+          {
+            label: currentProduct.name,
+            href: `/products/${currentProduct.slug}`,
+          },
+        ]}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Main Content - Two Column */}
