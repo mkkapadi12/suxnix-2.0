@@ -20,6 +20,8 @@ import AdminProfile from './pages/Admin/AdminProfile';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 import AdminUsers from './pages/Admin/AdminUsers';
 import AdminProducts from './pages/Admin/products/AdminProducts';
+import Products from './pages/Customer/Shop/Products';
+import ProductOverview from './pages/Customer/Shop/ProductOverview';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
+        path: 'products',
+        element: <Products />,
+      },
+      {
+        path: 'products/:id',
+        element: <ProductOverview />,
+      },
+      {
         path: 'account',
         element: <Account />,
       },
@@ -58,10 +68,6 @@ const router = createBrowserRouter([
       {
         path: 'addresses',
         element: <Addresses />,
-      },
-      {
-        path: 'settings',
-        element: <Settings />,
       },
     ],
   },
