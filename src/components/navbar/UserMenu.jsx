@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { User, Settings, LogOut } from 'lucide-react';
+import { User, Settings, LogOut, ShoppingBasket, ShoppingBag } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '@/Store/features/auth/user.auth.slice';
@@ -50,6 +50,13 @@ const UserMenu = () => {
           <Link to="/account/settings" className="flex gap-2 cursor-pointer">
             <Settings size={16} />
             Settings
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link to="/account/cart" className="flex gap-2 cursor-pointer">
+            <ShoppingBag size={16} />
+            Cart
           </Link>
         </DropdownMenuItem>
 

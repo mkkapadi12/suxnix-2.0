@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export const ImageGallery = ({ images = [], productName = '' }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -80,7 +85,7 @@ export const ImageGallery = ({ images = [], productName = '' }) => {
             <button
               key={index}
               onClick={() => setSelectedIndex(index)}
-              className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
+              className={`shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
                 selectedIndex === index
                   ? 'border-suxnix-primary'
                   : 'border-gray-200 hover:border-gray-300'
@@ -98,7 +103,10 @@ export const ImageGallery = ({ images = [], productName = '' }) => {
 
       {/* Lightbox Dialog */}
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-        <DialogContent className="max-w-4xl w-screen h-screen p-0 bg-black/90">
+        <DialogHeader className="hidden text-center!">
+          <DialogTitle className="text-white!">{productName}</DialogTitle>
+        </DialogHeader>
+        <DialogContent className="max-w-4xl w-screen h-[80vh] p-0 bg-black/90">
           <div className="w-full h-full flex items-center justify-center relative">
             <img
               src={mainImage.url}

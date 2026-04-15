@@ -44,17 +44,17 @@ export const shopnavigation = [
   {
     id: 1,
     name: 'Our Shop',
-    path: '/shop',
+    path: '/products',
   },
   {
     id: 2,
     name: 'Shop Details',
-    path: '/shop/product/suxnix_protein_01',
+    path: '/products/:slug',
   },
   {
     id: 3,
     name: 'Cart Page',
-    path: '/cart',
+    path: '/account/cart',
   },
   {
     id: 4,

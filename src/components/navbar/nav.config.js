@@ -18,7 +18,7 @@ export const NAV_ITEMS = [
   {
     type: 'link',
     title: 'Product',
-    path: '/product',
+    path: '/products',
   },
   // {
   //   type: 'link',

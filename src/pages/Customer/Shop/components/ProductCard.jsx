@@ -52,7 +52,7 @@ export const ProductCard = ({
 
   return (
     <Link to={`/products/${product.slug}`} className="group h-full">
-      <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300 py-0">
         {/* Image Section */}
         <div className="relative overflow-hidden bg-gray-100 aspect-square">
           {isImageLoading && (
@@ -64,7 +64,7 @@ export const ProductCard = ({
             alt={product.name}
             loading="lazy"
             onLoad={() => setIsImageLoading(false)}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
           />
 
           {/* Badges */}

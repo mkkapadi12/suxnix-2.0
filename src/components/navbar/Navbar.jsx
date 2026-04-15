@@ -54,11 +54,6 @@ export default function Navbar() {
           <DesktopNav />
 
           <div className="flex items-center justify-end sm:gap-10">
-            {/* Cart */}
-            {/* <div className="hidden text-suxnix-heading sm:block cursor-pointer">
-              <PAGE_ICONS.CART size={24} className="w-8 h-8" />
-            </div> */}
-
             {/* User Menu / Login */}
             <div className="hidden sm:block">
               <UserMenu />

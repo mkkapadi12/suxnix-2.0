@@ -37,7 +37,7 @@ function DialogOverlay({ className, ...props }) {
 function DialogContent({
   className,
   children,
-  showCloseButton = true,
+  showCloseButton = false,
   ...props
 }) {
   return (
