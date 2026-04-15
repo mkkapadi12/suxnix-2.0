@@ -1,3 +1,4 @@
+const uploadToCloudinary = require('../utils/uploadToCloudinary');
 const PRODUCT = require('../models/product.model');
 
 // Helper function to generate slug
@@ -376,7 +377,6 @@ const createProduct = async (req, res, next) => {
       shortDescription,
       brand,
       compareAtPrice,
-      images,
       weight,
       servingSize,
       servingsPerContainer,
@@ -419,6 +419,28 @@ const createProduct = async (req, res, next) => {
       return next(error);
     }
 
+    const Images = req.files || [];
+
+    console.log(Images);
+    const uploadedImages = await Promise.all(
+      Images.map(async (file, index) => {
+        const result = await uploadToCloudinary(file.buffer).then((res) => {
+          return {
+            url: res.url,
+            public_id: res.public_id,
+            isPrimary: index === 0,
+          };
+        });
+        return result;
+      }),
+    );
+
+    if (uploadedImages.length === 0) {
+      const error = new Error('Failed to upload images');
+      error.status = 500;
+      return next(error);
+    }
+
     const newProduct = new PRODUCT({
       name,
       description,
@@ -429,7 +451,7 @@ const createProduct = async (req, res, next) => {
       shortDescription,
       brand,
       compareAtPrice,
-      images,
+      images: uploadedImages,
       weight,
       servingSize,
       servingsPerContainer,

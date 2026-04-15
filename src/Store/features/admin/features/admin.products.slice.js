@@ -51,6 +51,7 @@ export const getAllProducts = createAsyncThunk(
 export const createProduct = createAsyncThunk(
   'admin/products/create',
   async (data, { rejectWithValue }) => {
+    console.log('Data in slice:', data);
     try {
       const result = await createProductAPI(data);
       return result;

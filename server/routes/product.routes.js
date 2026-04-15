@@ -26,7 +26,7 @@ const {
   requirePermission,
   adminAuthMiddleware,
 } = require('../middlewares/admin.middleware');
-
+const upload = require('../middlewares/upload.middleware');
 const router = express.Router();
 
 // ============================================
@@ -73,6 +73,7 @@ router.get(
 // Create product
 router.post(
   '/admin/create',
+  upload.array('images', 4),
   adminAuthMiddleware,
   requirePermission('manage_products'),
   createProduct,

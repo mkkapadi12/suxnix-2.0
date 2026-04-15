@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { toast } from 'sonner';
-import { X } from 'lucide-react';
 
 import {
   Drawer,
@@ -29,46 +27,11 @@ import {
   createProduct,
   updateProduct,
 } from '@/Store/features/admin/features/admin.products.slice';
-
-// Validation schema
-const productSchema = z.object({
-  name: z.string().min(1, 'Product name is required'),
-  sku: z.string().min(1, 'SKU is required'),
-  category: z.string().min(1, 'Category is required'),
-  status: z.enum(['draft', 'active', 'inactive', 'archived']),
-  brand: z.string().optional(),
-  shortDescription: z.string().max(200).optional(),
-  description: z.string().min(1, 'Description is required'),
-  price: z.coerce.number().min(0, 'Price must be greater than 0'),
-  compareAtPrice: z.coerce.number().optional(),
-  stock: z.coerce.number().min(0, 'Stock cannot be negative'),
-  lowStockThreshold: z.coerce.number().optional(),
-  weight: z
-    .object({
-      value: z.coerce.number().optional(),
-      unit: z.string().optional(),
-    })
-    .optional(),
-  servingSize: z.string().optional(),
-  servingsPerContainer: z.coerce.number().optional(),
-  metaTitle: z.string().max(60).optional(),
-  metaDescription: z.string().max(160).optional(),
-});
-
-const CATEGORIES = [
-  'protein',
-  'vitamins',
-  'pre_workout',
-  'fat_burner',
-  'creatine',
-  'amino_acids',
-  'weight_gainer',
-  'other',
-];
-
-const WEIGHT_UNITS = ['g', 'kg', 'lbs', 'oz'];
-
-const STATUSES = ['draft', 'active', 'inactive', 'archived'];
+import { productSchema } from '../../Schema/adminProductSchema';
+import { CATEGORIES, STATUSES, WEIGHT_UNITS } from '../../constant';
+import { ADMIN_ICONS } from '@/lib/icons/admin.icons';
+import { ImagePlus, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export const ProductFormDrawer = ({
   isOpen,
@@ -79,6 +42,9 @@ export const ProductFormDrawer = ({
   const dispatch = useDispatch();
   const { formLoading, products } = useSelector((state) => state.adminProducts);
   const [selectedTab, setSelectedTab] = useState('basic');
+  const [images, setImages] = useState([]);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef(null);
 
   const {
     register,
@@ -95,6 +61,37 @@ export const ProductFormDrawer = ({
     },
   });
 
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      setImages((prev) => [...prev, ...droppedFiles]);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const newFiles = Array.from(e.target.files);
+      setImages((prev) => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // Update form when productData changes
   useEffect(() => {
     if (productData) {
@@ -104,22 +101,51 @@ export const ProductFormDrawer = ({
 
   const onSubmit = async (data) => {
     try {
+      const formData = new FormData();
+
+      // Append all form fields
+      Object.keys(data).forEach((key) => {
+        if (data[key] !== undefined && data[key] !== null) {
+          // Handle arrays (flavors, tags, etc.)
+          if (Array.isArray(data[key])) {
+            data[key].forEach((item) => {
+              formData.append(key, item);
+            });
+          }
+          // Handle objects (nutritionFacts)
+          else if (typeof data[key] === 'object') {
+            formData.append(key, JSON.stringify(data[key]));
+          }
+          // Handle primitives
+          else {
+            formData.append(key, data[key]);
+          }
+        }
+      });
+
+      // Append images
+      images.forEach((img) => {
+        formData.append('images', img);
+      });
+
       const toastId = toast.loading(
         productId ? 'Updating product...' : 'Creating product...',
       );
 
       if (productId) {
-        await dispatch(updateProduct({ id: productId, data })).unwrap();
+        await dispatch(
+          updateProduct({ id: productId, data: formData }),
+        ).unwrap();
         toast.success('Product updated successfully', { id: toastId });
       } else {
-        await dispatch(createProduct(data)).unwrap();
+        await dispatch(createProduct(formData)).unwrap();
         toast.success('Product created successfully', { id: toastId });
       }
 
       onOpenChange(false);
       reset();
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'Failed to save product');
+      toast.error(error || 'Failed to save product');
     }
   };
 
@@ -475,9 +501,69 @@ export const ProductFormDrawer = ({
               <TabsContent value="images" className="space-y-4 mt-0">
                 <div>
                   <Label className="text-sm font-medium">Images</Label>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Image management coming soon
-                  </p>
+                  <div className="space-y-2">
+                    <Label className="text-zinc-300">
+                      Images <span className="text-red-400">*</span>
+                    </Label>
+                    <div
+                      className={cn(
+                        'border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors',
+                        dragActive
+                          ? 'border-lime-400 bg-lime-400/5'
+                          : 'border-zinc-800 hover:border-zinc-700 bg-zinc-900/50 hover:bg-zinc-900',
+                      )}
+                      onDragEnter={handleDrag}
+                      onDragLeave={handleDrag}
+                      onDragOver={handleDrag}
+                      onDrop={handleDrop}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <ImagePlus className="h-8 w-8 text-zinc-500 mb-2" />
+                      <p className="text-sm font-medium text-zinc-300">
+                        Click or drag images here
+                      </p>
+                      <p className="text-xs text-zinc-500 mt-1">
+                        Upload up to 4 images (PNG, JPG)
+                      </p>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        ref={fileInputRef}
+                        className="hidden"
+                        onChange={handleImageChange}
+                      />
+                    </div>
+
+                    {/* Image Previews */}
+                    {images?.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {images.map((img, index) => (
+                          <div
+                            key={index}
+                            className="relative rounded-lg overflow-hidden border border-zinc-800 h-20 w-20 group"
+                          >
+                            <img
+                              src={URL.createObjectURL(img)}
+                              alt="Preview"
+                              className="h-full w-full object-cover"
+                            />
+                            <button
+                              onClick={() => removeImage(index)}
+                              className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                            {index === 0 && (
+                              <div className="absolute bottom-0 left-0 right-0 bg-lime-400 text-zinc-900 text-[10px] font-bold text-center py-0.5">
+                                Main
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div>

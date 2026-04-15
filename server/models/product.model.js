@@ -89,17 +89,12 @@ const productSchema = new mongoose.Schema(
     // Media
     images: [
       {
-        url: {
-          type: String,
-          required: true,
-        },
-        alt: String,
-        isPrimary: {
-          type: Boolean,
-          default: false,
-        },
+        url: { type: String, required: true },
+        public_id: { type: String, required: true },
+        isPrimary: { type: Boolean, default: false },
       },
     ],
+    
     thumbnail: String,
 
     // Product Details (Health-specific)
